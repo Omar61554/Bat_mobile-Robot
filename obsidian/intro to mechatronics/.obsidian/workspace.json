@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "d78fa75f3f6faab5",
+        "id": "ce028ded2aca37c8",
         "type": "tabs",
         "children": [
           {
-            "id": "398aa31707a27b67",
+            "id": "233636401e0a7864",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -139,13 +139,16 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "398aa31707a27b67",
+  "active": "233636401e0a7864",
   "lastOpenFiles": [
+    "Frame.md",
     "Testing every module separately.md",
+    "Untitled 2.canvas",
+    "Untitled 1.canvas",
+    "Untitled.canvas",
     "Linking.md",
     "Navigation.md",
     "police chase.md",
-    "Frame.md",
     "Body.md",
     "Wiring coding.md",
     "Design and Manufacturing.md",
