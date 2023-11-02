@@ -19,19 +19,19 @@ cd Modules
         type nul > NAV_private.h
         type nul > NAV_interface.h
         type nul > NAV_configure.h
-        type nul > NAV_program.c
+        type nul > NAV_program.cpp
     cd ..    
 
     cd shooting
         type nul > SHOT_private.h
         type nul > SHOT_interface.h
         type nul > SHOT_configure.h
-        type nul > SHOT_program.c
+        type nul > SHOT_program.cpp
     cd ..   
 
       cd Bluetooth
         type nul > BLUE_private.h
         type nul > BLUE_interface.h
         type nul > BLUE_configure.h
-        type nul > BLUE_program.c
+        type nul > BLUE_program.cpp
     cd ..   
