@@ -9,10 +9,11 @@
 #ifndef NAV_INTERFACE_H_
 #define NAV_INTERFACE_H_
 
+
 // defines of NAV_pins
 
 //Motor pins
-#define NAV_Motor_R_Enable 6 //Enable signal Right motor //white
+#define NAV_Motor_R_Enable 9 //Enable signal Right motor //white
 #define NAV_Motor_R_Right 7 //direction 1 Right motor   //black
 #define NAV_Motor_R_Left 8 //direction 2 Right motor    //yellow
 #define NAV_Motor_L_Enable 11 //Enable signal left motor // violet
@@ -35,15 +36,33 @@
 #define NAV_Modes_s1 10
 #define NAV_Color_s2 4
 #define NAV_Color_s3 5
-#define NAV_colorSensor_out A5
+#define NAV_colorSensor_out 2
 //white :R= 83 G =84 B =75
 //black :R= 302 G =272 B =251
 
 
-void NAV_Move(int NAV_Motor_R_Speed, int NAV_Motor_L_Speed,char NAV_direction);
 
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * 
+*/
+void NAV_Move(int NAV_Motor_R_Speed, int NAV_Motor_L_Speed, char NAV_direction);
+
+
+
+/**
+ * 
+*/
 int NAV_getRed();
+
+
 
 /**
  * 
@@ -51,16 +70,22 @@ int NAV_getRed();
 */
 int NAV_getGreen();
 
+
+
 /**
  * 
 */
 int NAV_getBlue();
+
+
 
 /**
  * @brief  this function is used to setup the navigation module
  * 
  */
 void NAV_Setup();
+
+
 
 /**
  * @brief  this function is the main function of the navigation module
