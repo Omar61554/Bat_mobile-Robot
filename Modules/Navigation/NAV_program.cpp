@@ -10,7 +10,11 @@
 #include "NAV_configure.h"
 #include <Arduino.h>
 //#include "../STD_ATYPES.hpp"
+int IR1,IR2,IR3,IR4,IR5;
 
+int calibValueRed = 140;
+int calibValueGreen = 140;
+int calibValueBlue = 140;
 /**
  * @brief  this function is used to move the robot
  * @param NAV_Motor_R_Speed the speed of the right motor //higher to move left
@@ -107,34 +111,34 @@ void NAV_Setup()
  * @brief this function is the main function of the navigation module
  *
  */
-void NAV_Main()
-{
-    int NAV_IR_Signal_R = digitalRead(NAV_Infrared_R);
-    int NAV_IR_Signal_L = digitalRead(NAV_Infrared_L);
+// void NAV_Main()
+// {
+//     int NAV_IR_Signal_R = digitalRead(NAV_Infrared_R);
+//     int NAV_IR_Signal_L = digitalRead(NAV_Infrared_L);
 
-    if (NAV_IR_Signal_R && NAV_IR_Signal_L)
-    {
-        NAV_Move(70*1.5, 70*1.5, 'F'); // signal white //light -> no  signal
+//     if (NAV_IR_Signal_R && NAV_IR_Signal_L)
+//     {
+//         NAV_Move(70*1.5, 70*1.5, 'F'); // signal white //light -> no  signal
 
-        // no signal black
-    }
-    else if (!NAV_IR_Signal_R && NAV_IR_Signal_L)
-    {
-        NAV_Move(50*1.5, 70*1.5, 'F');
-    }
-    else if (NAV_IR_Signal_R && !NAV_IR_Signal_L)
-    {
-        NAV_Move(70*1.5, 50*1.5, 'F');
-    }
-    else if (!NAV_IR_Signal_R && !NAV_IR_Signal_L)
-    {
-        NAV_Move(60*1.5, 60*1.5, 'B');
-    }
-    else
-    {
-        // do nothing
-    }
-}
+//         // no signal black
+//     }
+//     else if (!NAV_IR_Signal_R && NAV_IR_Signal_L)
+//     {
+//         NAV_Move(50*1.5, 70*1.5, 'F');
+//     }
+//     else if (NAV_IR_Signal_R && !NAV_IR_Signal_L)
+//     {
+//         NAV_Move(70*1.5, 50*1.5, 'F');
+//     }
+//     else if (!NAV_IR_Signal_R && !NAV_IR_Signal_L)
+//     {
+//         NAV_Move(60*1.5, 60*1.5, 'B');
+//     }
+//     else
+//     {
+//         // do nothing
+//     }
+// }
 
 void NAV_COLORSENSOR_TEST(){
 
@@ -185,7 +189,7 @@ void IR_Sensor_Priority(){
     else if((!IR1) && (!IR2) && (!IR3) && (!IR4) && (!IR5)){
         Serial.println("Stop");//stop
         NAV_Move(0, 0, 'F');
-        
+
     }
 //    
     // big_turn_right = IR1.not(IR5)
@@ -240,38 +244,39 @@ void NAV_IR_TEST(){
 int NAV_Color_Sensor(){
     /*
     0=white
-    1=black
-    2=red
-    3=green
-    4=blue
-    5=yellow
+    1=red
+    2=green
+    3=blue
+    4=yellow
+    5=black
     */
     int R = NAV_getRed();
     int G = NAV_getGreen();
     int B = NAV_getBlue();  
-    if (R > calibValueRed){
-        //red
-        return 2;
-    }
-    else if (G > calibValueGreen){
-        //green
-        return 3;
-    }
-    else if (B > calibValueBlue){
-        //blue
-        return 4;
-    }
-    else if (R > calibValueRed && G > calibValueGreen){
-        //yellow
-        return 5;
-    }
-    else if (R > calibValueRed && G > calibValueGreen && B > calibValueBlue){
+    if (R > calibValueRed && G > calibValueGreen && B > calibValueBlue){
         //white
         return 0;
     }
+    else if (R > calibValueRed){
+        //red
+        return 1;
+    }
+    else if (G > calibValueGreen){
+        //green
+        return 2;
+    }
+    else if (B > calibValueBlue){
+        //blue
+        return 3;
+    }
+    else if (R > calibValueRed && G > calibValueGreen){
+        //yellow
+        return 4;
+    }
+    
     else{
         //black
-        return 1;
+        return 5;
     }
 }
 
@@ -282,22 +287,34 @@ void missionSelector(int colorValue){
         //white
         break;
     case 1:
-        //black
-        break;
-    case 2:
         jokerMission();    //red
         break;
-    case 3:
+    case 2:
         riddlerMission();//green
         break;
-    case 4:
+    case 3:
         //blue
         break;
-    case 5:
+    case 4:
         policeChaseMission();//yellow
         //check for second time it detects yellow to end the mission
         break;
     default:
         break;
     }
+}
+
+void jokerMission(){
+    Serial.println("Joker Mission");
+    // implement joker mission here
+}
+
+void riddlerMission(){
+    Serial.println("Riddler Mission");
+    // implement riddler mission here
+}
+
+void policeChaseMission(){
+    Serial.println("Police Chase Mission");
+    // implement police chase mission here
 }
