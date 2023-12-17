@@ -103,49 +103,49 @@ void NAV_Setup();
 
 
 /**
- * @brief  this function is the main function of the navigation module
+ * @brief  this function is a test function for the motors
  * 
  */
 void NAV_Main();
 
 /**
- * @brief  this function is used to setup the navigation module
+ * @brief  this function is the main function of the line follower
  * 
  */
 void IR_Sensor_Priority();
 
 /**
- * @brief  this function is used to setup the navigation module
+ * @brief  this function is used to test IR sensors
  * 
  */
 void NAV_IR_TEST();
 
 /**
- * @brief  this function is used to setup the navigation module
+ * @brief  this function is used to detect the color
  * 
  */
 int NAV_Color_Sensor();
 
 /**
- * @brief  this function is used to setup the navigation module
+ * @brief  this function is used to slect mission 
  * 
  */
 void missionSelector(int colorValue);
 
 /**
- * @brief  this function is used to setup the navigation module
+ * @brief  this function is used to call joker mission
  * 
  */
 void jokerMission();
 
 /**
- * @brief  this function is used to setup the navigation module
+ * @brief  this function is used to call riddler mission
  * 
  */
 void riddlerMission();
 
 /**
- * @brief  this function is used to setup the navigation module
+ * @brief  this function is used to call the police chase mission
  * 
  */
 void policeChaseMission();
