@@ -21,11 +21,11 @@
 #define NAV_Motor_L_Left 13 //direction 2 Left motor    // green
 
 //IR Sensor pins
-#define NAV_Infrared_1 0 //signal pin from IR Sensor 1
-#define NAV_Infrared_2 1 //signal pin from IR Sensor 2
-#define NAV_Infrared_3 2 //signal pin from IR Sensor 3
-#define NAV_Infrared_4 3 //signal pin from IR Sensor 4
-#define NAV_Infrared_5 4 //signal pin from IR Sensor 5
+#define NAV_Infrared_1 2 //signal pin from IR Sensor 1
+#define NAV_Infrared_2 3 //signal pin from IR Sensor 2
+#define NAV_Infrared_3 4 //signal pin from IR Sensor 3
+#define NAV_Infrared_4 5 //signal pin from IR Sensor 4
+#define NAV_Infrared_5 6 //signal pin from IR Sensor 5
 
 //IR Sensor values
 // int IR1;
@@ -42,10 +42,10 @@
 //int NAV_IR_Signal_L;
 
 //color sensor pins 
-#define NAV_Modes_s0 6
-#define NAV_Modes_s1 10
-#define NAV_Color_s2 4
-#define NAV_Color_s3 5
+#define NAV_Modes_s0 A4
+#define NAV_Modes_s1 A3
+#define NAV_Color_s2 A1
+#define NAV_Color_s3 A2
 #define NAV_colorSensor_out  A0
 
 //color sensor values
@@ -66,21 +66,21 @@
 
 
 /**
- * 
+ * @brief this function is used to move the robot
 */
 void NAV_Move(int NAV_Motor_R_Speed, int NAV_Motor_L_Speed, char NAV_direction);
 
 
 
 /**
- * 
+ * @brief this function is used to get the red value from the color sensor
 */
 int NAV_getRed();
 
 
 
 /**
- * 
+ * @brief this function is used to get the green value from the color sensor
  * 
 */
 int NAV_getGreen();
@@ -88,7 +88,7 @@ int NAV_getGreen();
 
 
 /**
- * 
+ *@brief this function is used to get the blue value from the color sensor
 */
 int NAV_getBlue();
 
@@ -108,19 +108,46 @@ void NAV_Setup();
  */
 void NAV_Main();
 
-
+/**
+ * @brief  this function is used to setup the navigation module
+ * 
+ */
 void IR_Sensor_Priority();
 
+/**
+ * @brief  this function is used to setup the navigation module
+ * 
+ */
 void NAV_IR_TEST();
 
+/**
+ * @brief  this function is used to setup the navigation module
+ * 
+ */
 int NAV_Color_Sensor();
 
+/**
+ * @brief  this function is used to setup the navigation module
+ * 
+ */
 void missionSelector(int colorValue);
 
+/**
+ * @brief  this function is used to setup the navigation module
+ * 
+ */
 void jokerMission();
 
+/**
+ * @brief  this function is used to setup the navigation module
+ * 
+ */
 void riddlerMission();
 
+/**
+ * @brief  this function is used to setup the navigation module
+ * 
+ */
 void policeChaseMission();
 
 

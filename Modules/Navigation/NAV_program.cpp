@@ -30,17 +30,17 @@ void NAV_Move(int NAV_Motor_R_Speed, int NAV_Motor_L_Speed, char NAV_direction)
     
     if (NAV_direction == 'F')
     {
-        digitalWrite(NAV_Motor_L_Right, LOW);  // direction 1 left motor
-        digitalWrite(NAV_Motor_L_Left, HIGH);  // direction 2 Left motor
-        digitalWrite(NAV_Motor_R_Right, HIGH); // direction 1 Right motor
-        digitalWrite(NAV_Motor_R_Left, LOW);   // direction 2 Right motor
+        digitalWrite(NAV_Motor_L_Right, HIGH);  // direction 1 left motor
+        digitalWrite(NAV_Motor_L_Left, LOW);  // direction 2 Left motor
+        digitalWrite(NAV_Motor_R_Right, LOW); // direction 1 Right motor
+        digitalWrite(NAV_Motor_R_Left, HIGH);   // direction 2 Right motor
     }
     else if (NAV_direction == 'B')
     {
-        digitalWrite(NAV_Motor_L_Right, HIGH); // direction 1 left motor
-        digitalWrite(NAV_Motor_L_Left, LOW);   // direction 2 Left motor
-        digitalWrite(NAV_Motor_R_Right, LOW);  // direction 1 Right motor
-        digitalWrite(NAV_Motor_R_Left, HIGH);  // direction 2 Right motor
+        digitalWrite(NAV_Motor_L_Right, LOW); // direction 1 left motor
+        digitalWrite(NAV_Motor_L_Left, HIGH);   // direction 2 Left motor
+        digitalWrite(NAV_Motor_R_Right, HIGH);  // direction 1 Right motor
+        digitalWrite(NAV_Motor_R_Left, LOW);  // direction 2 Right motor
     }
     else
     {
@@ -111,34 +111,45 @@ void NAV_Setup()
  * @brief this function is the main function of the navigation module
  *
  */
-// void NAV_Main()
-// {
-//     int NAV_IR_Signal_R = digitalRead(NAV_Infrared_R);
-//     int NAV_IR_Signal_L = digitalRead(NAV_Infrared_L);
+void NAV_Main()
+{
+    IR1 = digitalRead(NAV_Infrared_1);
+    IR2 = digitalRead(NAV_Infrared_2);
+    IR3 = digitalRead(NAV_Infrared_3);   // black IR reading 1 and no light
+    IR4 = digitalRead(NAV_Infrared_4);   // white IR reading 0 and light
+    IR5 = digitalRead(NAV_Infrared_5);
 
-//     if (NAV_IR_Signal_R && NAV_IR_Signal_L)
-//     {
-//         NAV_Move(70*1.5, 70*1.5, 'F'); // signal white //light -> no  signal
+    if (!IR2 && !IR3 && !IR4 && IR1&&IR5)
+    {
+        NAV_Move(70*1.8, 70*1.8, 'F'); // signal white //light -> no  signal
 
-//         // no signal black
-//     }
-//     else if (!NAV_IR_Signal_R && NAV_IR_Signal_L)
-//     {
-//         NAV_Move(50*1.5, 70*1.5, 'F');
-//     }
-//     else if (NAV_IR_Signal_R && !NAV_IR_Signal_L)
-//     {
-//         NAV_Move(70*1.5, 50*1.5, 'F');
-//     }
-//     else if (!NAV_IR_Signal_R && !NAV_IR_Signal_L)
-//     {
-//         NAV_Move(60*1.5, 60*1.5, 'B');
-//     }
-//     else
-//     {
-//         // do nothing
-//     }
-// }
+        // no signal black
+    }
+    else if (IR2 && !IR3 && !IR4 && IR1 && IR5)
+    {
+        NAV_Move(50*1.8, 70*1.8, 'F');
+    }
+    else if (IR4&& !IR1 &&!IR2 && IR1 && IR5 )
+    {
+        NAV_Move(70*1.8, 50*1.8, 'F');
+    }
+    else if(!IR1){
+        NAV_Move(10*1.8 ,70*1.8 ,'F');
+
+    }
+    else if(!IR5){
+        NAV_Move(70*1.8 ,10*1.8 ,'F');
+
+    }
+    else if (!IR1&&!IR2&&!IR3&&!IR4&&!IR5)
+    {
+        NAV_Move(70*1.8, 70*1.8, 'B');
+    }
+    else
+    {
+        // do nothing
+    }
+}
 
 void NAV_COLORSENSOR_TEST(){
 
@@ -156,40 +167,45 @@ void IR_Sensor_Priority(){
     // IR5 IR4 IR3 IR2 IR1 //
     IR1 = digitalRead(NAV_Infrared_1);
     IR2 = digitalRead(NAV_Infrared_2);
-    IR3 = digitalRead(NAV_Infrared_3);
-    IR4 = digitalRead(NAV_Infrared_4);
+    IR3 = digitalRead(NAV_Infrared_3);    // black IR reading 1 and no light
+    IR4 = digitalRead(NAV_Infrared_4);    // white IR reading 0 and light
     IR5 = digitalRead(NAV_Infrared_5);
-    
+    float F = 1.8;
     if (IR1 && !IR5){
         Serial.println("Big Turn Right");   //big turn right
-        NAV_Move(70*1.5, 50*1.5, 'F');
-        delay(100);
+        NAV_Move(50*F, 70*F, 'F');
+        delay(300);
     }
     else if (!IR1 && IR5){
 
         Serial.println("Big Turn Left");   //big turn left
-        NAV_Move(50*1.5, 70*1.5, 'F');
-        delay(100);
+        NAV_Move(70*F ,30*F, 'F');
+        delay(300);
     }
     else if((!IR1) && (!IR4) && (!IR5) && IR2){
         Serial.println("Small Turn Right");  //small turn right
-        NAV_Move(70*1.5, 60*1.5, 'F');
-        delay(100);
+        NAV_Move(50*F, 70*F, 'F');
+         delay(100);
     }
     else if((!IR1) && (!IR2) && (!IR5) && IR4){
         Serial.println("Small Turn Left");//small turn left
-        NAV_Move(60*1.5, 70*1.5, 'F');
+        NAV_Move(70*F, 50*F, 'F');
         delay(100);
     }
-    else if(IR3 || (IR2&&IR4) || (IR1&&IR5)){
+    // else if(IR3 || (IR2&&IR4) || (IR1&&IR5)){
+    //     Serial.println("Straight Line");//straight line
+    //     NAV_Move(70*F, 70*F, 'F');
+    //     delay(200);
+    // }
+     else if(IR3&&IR2&&IR4 ){
         Serial.println("Straight Line");//straight line
-        NAV_Move(70*1.5, 70*1.5, 'F');
+        NAV_Move(70*F, 70*F, 'F');
         delay(200);
     }
     else if((!IR1) && (!IR2) && (!IR3) && (!IR4) && (!IR5)){
-        Serial.println("Stop");//stop
-        NAV_Move(0, 0, 'F');
-
+        Serial.println("REVERSE");//REVERSE
+        NAV_Move(70*F, 70*F, 'B');
+        delay(200);
     }
 //    
     // big_turn_right = IR1.not(IR5)
@@ -253,27 +269,33 @@ int NAV_Color_Sensor(){
     int R = NAV_getRed();
     int G = NAV_getGreen();
     int B = NAV_getBlue();  
-    if (R > calibValueRed && G > calibValueGreen && B > calibValueBlue){
-        //white
-        return 0;
-    }
-    else if (R > calibValueRed){
+    //if (R > calibValueRed && G > calibValueGreen && B > calibValueBlue){
+    
+    //else if (R > calibValueRed){
+    if (R > 310 && G < 270 && B < 270){
         //red
         return 1;
     }
-    else if (G > calibValueGreen){
+    //else if (G > calibValueGreen){
+    else if(G > 300 && R < 300 && B < 260){
+    
         //green
         return 2;
     }
-    else if (B > calibValueBlue){
-        //blue
-        return 3;
-    }
-    else if (R > calibValueRed && G > calibValueGreen){
+    //else if (B > calibValueBlue){
+    // else if()
+    //     //blue
+    //     return 3;
+    // }
+    //else if (R > calibValueRed && G > calibValueGreen){
+    else if(R > 340 && G > 320 && B < 290){
         //yellow
         return 4;
     }
-    
+    else if (R > 310 && G > 320 && B > 320){
+        //white
+        return 0;
+    }
     else{
         //black
         return 5;
@@ -284,13 +306,13 @@ void missionSelector(int colorValue){
     switch (colorValue)
     {
     case 0:
-        //white
+        Serial.println("Whiteee");//white
         break;
     case 1:
-        jokerMission();    //red
+        jokerMission();     //red
         break;
     case 2:
-        riddlerMission();//green
+        riddlerMission();   //green
         break;
     case 3:
         //blue
@@ -300,6 +322,7 @@ void missionSelector(int colorValue){
         //check for second time it detects yellow to end the mission
         break;
     default:
+        Serial.println("black");
         break;
     }
 }
