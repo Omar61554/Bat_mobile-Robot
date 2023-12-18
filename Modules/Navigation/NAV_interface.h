@@ -112,7 +112,7 @@ void NAV_Main();
  * @brief  this function is the main function of the line follower
  * 
  */
-void IR_Sensor_Priority();
+void IR_Sensor_Priority(float F);
 
 /**
  * @brief  this function is used to test IR sensors
@@ -127,7 +127,7 @@ void NAV_IR_TEST();
 int NAV_Color_Sensor();
 
 /**
- * @brief  this function is used to slect mission 
+ * @brief  this function is used to select mission 
  * 
  */
 void missionSelector(int colorValue);

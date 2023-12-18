@@ -10,11 +10,21 @@
 #include "NAV_configure.h"
 #include <Arduino.h>
 //#include "../STD_ATYPES.hpp"
+
+//********************************************************************************************************************//
 int IR1,IR2,IR3,IR4,IR5;
 
 int calibValueRed = 140;
 int calibValueGreen = 140;
 int calibValueBlue = 140;
+
+char last_move='W'; // R or L  don't let them know your next move
+
+
+//********************************************************************************************************************//
+
+
+
 /**
  * @brief  this function is used to move the robot
  * @param NAV_Motor_R_Speed the speed of the right motor //higher to move left
@@ -163,24 +173,26 @@ void NAV_COLORSENSOR_TEST(){
 
 }
 
-void IR_Sensor_Priority(){
+void IR_Sensor_Priority(float F){
     // IR5 IR4 IR3 IR2 IR1 //
     IR1 = digitalRead(NAV_Infrared_1);
     IR2 = digitalRead(NAV_Infrared_2);
     IR3 = digitalRead(NAV_Infrared_3);    // black IR reading 1 and no light
     IR4 = digitalRead(NAV_Infrared_4);    // white IR reading 0 and light
     IR5 = digitalRead(NAV_Infrared_5);
-    float F = 1.8;
+
     if (IR1 && !IR5){
         Serial.println("Big Turn Right");   //big turn right
         NAV_Move(50*F, 70*F, 'F');
         delay(300);
+        last_move='R';
     }
     else if (!IR1 && IR5){
 
         Serial.println("Big Turn Left");   //big turn left
         NAV_Move(70*F ,30*F, 'F');
         delay(300);
+        last_move='L';
     }
     else if((!IR1) && (!IR4) && (!IR5) && IR2){
         Serial.println("Small Turn Right");  //small turn right
@@ -302,11 +314,11 @@ int NAV_Color_Sensor(){
     }
 }
 
-void missionSelector(int colorValue){
+void missionSelector(int colorValue = NAV_Color_Sensor()){
     switch (colorValue)
     {
     case 0:
-        Serial.println("Whiteee");//white
+        Serial.println("White");//white
         break;
     case 1:
         jokerMission();     //red
@@ -330,14 +342,45 @@ void missionSelector(int colorValue){
 void jokerMission(){
     Serial.println("Joker Mission");
     // implement joker mission here
+    if(last_move='R'){
+        NAV_Move(70*1.8, 70*1.8, 'B');
+        delay(600);
+        NAV_Move(10*1.8, 70*1.8, 'B');
+        delay(500);
+    }
+    else if(last_move='L'){
+        NAV_Move(70*1.8, 70*1.8, 'B');
+        delay(600);
+        NAV_Move(70*1.8, 10*1.8, 'B');
+        delay(500);
+    }
+    else{
+        //do nothing
+    }
 }
 
 void riddlerMission(){
     Serial.println("Riddler Mission");
     // implement riddler mission here
+    if(last_move='R'){
+        NAV_Move(70*1.8, 70*1.8, 'B');
+        delay(600);
+        NAV_Move(10*1.8, 70*1.8, 'B');
+        delay(500);
+    }
+    else if(last_move='L'){
+        NAV_Move(70*1.8, 70*1.8, 'B');
+        delay(600);
+        NAV_Move(70*1.8, 10*1.8, 'B');
+        delay(500);
+    }
+    else{
+        //do nothing
+    }
 }
 
 void policeChaseMission(){
     Serial.println("Police Chase Mission");
     // implement police chase mission here
+    IR_Sensor_Priority(2.2);
 }
