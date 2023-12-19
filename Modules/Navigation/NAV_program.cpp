@@ -9,6 +9,7 @@
 #include "NAV_private.h"
 #include "NAV_configure.h"
 #include <Arduino.h>
+#include <math.h>
 //#include "../STD_ATYPES.hpp"
 
 //********************************************************************************************************************//
@@ -330,7 +331,11 @@ void missionSelector(int colorValue = NAV_Color_Sensor()){
         //blue
         break;
     case 4:
-        policeChaseMission();//yellow
+        //yellow
+
+        policeChaseMission();
+        
+        
         //check for second time it detects yellow to end the mission
         break;
     default:
@@ -382,5 +387,30 @@ void riddlerMission(){
 void policeChaseMission(){
     Serial.println("Police Chase Mission");
     // implement police chase mission here
-    IR_Sensor_Priority(2.2);
+    unsigned long tick;
+    unsigned long tock;
+    tick = millis();
+    tock = millis();
+    if (policeFlag is false){
+        while(abs(tock - tick) < 2000){
+            //move forward
+            //Increase speed of motors
+            IR_Sensor_Priority(2.2);
+
+            //hinders signal from color sensor for 2 seconds to make sure the robot passes 
+            //the first yellow line
+            tick = millis();
+            }
+        }
+    //If color sensor detects black -> police Flag = true
+    //if color sensor detects yellow again -> end mission
+    
+    else{
+        //end mission
+        IR_Sensor_Priority(1.0);
+    }
+    policeFlag = true;
+    
+
+    //check for second flag to end the mission
 }
