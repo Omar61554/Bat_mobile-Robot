@@ -52,9 +52,9 @@ public:
     //Constructor
     Car(){
         int missionFlag = 0;
-        int calibValuesPoliceChase[] = [255,255,255];
-        int calibValuesJoker[] = [155,155,155];
-        int calibValuesRiddler[] = [140, 150, 160];
+        int calibValuesPoliceChase[] = {255,255,255};
+        int calibValuesJoker[] = {155,155,155};
+        int calibValuesRiddler[] = {140, 150, 160};
         int NAV_Motor_L_Speed = 0;
         int NAV_Motor_R_Speed = 0;
         char NAV_direction = 'f';
@@ -63,31 +63,52 @@ public:
     
     void NAV_Move(int NAV_Motor_R_Speed, int NAV_Motor_L_Speed, char NAV_direction){
 
-    analogWrite(NAV_Motor_L_Enable, NAV_Motor_L_Speed);
-    analogWrite(NAV_Motor_R_Enable, NAV_Motor_R_Speed);
-    
-    if (NAV_direction == 'F')
-    {
-        digitalWrite(NAV_Motor_L_Right, HIGH);  // direction 1 left motor
-        digitalWrite(NAV_Motor_L_Left, LOW);  // direction 2 Left motor
-        digitalWrite(NAV_Motor_R_Right, LOW); // direction 1 Right motor
-        digitalWrite(NAV_Motor_R_Left, HIGH);   // direction 2 Right motor
+        analogWrite(NAV_Motor_L_Enable, NAV_Motor_L_Speed);
+        analogWrite(NAV_Motor_R_Enable, NAV_Motor_R_Speed);
+        
+        if (NAV_direction == 'F')
+        {
+            digitalWrite(NAV_Motor_L_Right, HIGH);  // direction 1 left motor
+            digitalWrite(NAV_Motor_L_Left, LOW);  // direction 2 Left motor
+            digitalWrite(NAV_Motor_R_Right, LOW); // direction 1 Right motor
+            digitalWrite(NAV_Motor_R_Left, HIGH);   // direction 2 Right motor
+        }
+        else if (NAV_direction == 'B')
+        {
+            digitalWrite(NAV_Motor_L_Right, LOW); // direction 1 left motor
+            digitalWrite(NAV_Motor_L_Left, HIGH);   // direction 2 Left motor
+            digitalWrite(NAV_Motor_R_Right, HIGH);  // direction 1 Right motor
+            digitalWrite(NAV_Motor_R_Left, LOW);  // direction 2 Right motor
+        }
+        else
+        {
+            // do nothing
+        }
     }
-    else if (NAV_direction == 'B')
-    {
-        digitalWrite(NAV_Motor_L_Right, LOW); // direction 1 left motor
-        digitalWrite(NAV_Motor_L_Left, HIGH);   // direction 2 Left motor
-        digitalWrite(NAV_Motor_R_Right, HIGH);  // direction 1 Right motor
-        digitalWrite(NAV_Motor_R_Left, LOW);  // direction 2 Right motor
-    }
-    else
-    {
-        // do nothing
-    }
-}
+    void controller(){
 
-    void IR_Sensor_Priority(float F){
+        //ir sensors readings
+        int IRReading = IR_Sensor_Priority();
+
+        int colorValue = NAV_Color_Sensor();
+        missionSelector(colorValue);
+        
+        //color sensors readings
+        //mission selector
+        //nav move
+        //
+    }
+    int IR_Sensor_Priority(){
         // IR5 IR4 IR3 IR2 IR1 //
+        /*
+        0 = Reverse
+        1 = Straight line
+        2 = Big turn right
+        3 = Big turn left
+        4 = Small turn right
+        5 = Small turn left
+        */
+
         IR1 = digitalRead(NAV_Infrared_1);
         IR2 = digitalRead(NAV_Infrared_2);
         IR3 = digitalRead(NAV_Infrared_3);    // black IR reading 1 and no light
@@ -96,6 +117,7 @@ public:
 
         if (IR1 && !IR5){
             Serial.println("Big Turn Right");   //big turn right
+            return 2; //big turn right
             NAV_Move(50*speedFactor, 70*speedFactor, 'F');
             delay(300);
             last_move='R';
@@ -103,17 +125,20 @@ public:
         else if (!IR1 && IR5){
 
             Serial.println("Big Turn Left");   //big turn left
+            return 3; //big turn left
             NAV_Move(70*speedFactor ,30*speedFactor, 'F');
             delay(300);
             last_move='L';
         }
         else if((!IR1) && (!IR4) && (!IR5) && IR2){
             Serial.println("Small Turn Right");  //small turn right
+            return 4; //Small turn right
             NAV_Move(50*speedFactor, 70*speedFactor, 'F');
             delay(100);
         }
         else if((!IR1) && (!IR2) && (!IR5) && IR4){
             Serial.println("Small Turn Left");//small turn left
+            return 5; //Small turn left
             NAV_Move(70*speedFactor, 50*speedFactor, 'F');
             delay(100);
         }
@@ -124,11 +149,13 @@ public:
         // }
         else if(IR3&&IR2&&IR4 ){
             Serial.println("Straight Line");//straight line
+            return 1; //straight line code
             NAV_Move(70*speedFactor, 70*speedFactor, 'F');
             delay(200);
         }
         else if((!IR1) && (!IR2) && (!IR3) && (!IR4) && (!IR5)){
             Serial.println("REVERSE");//REVERSE
+            return 0;
             NAV_Move(70*speedFactor, 70*speedFactor, 'B');
             delay(200);
         }
@@ -236,7 +263,7 @@ public:
         //black
         return 5;
     }
-}
+    }
 
     void missionSelector(int colorValue = NAV_Color_Sensor()){
         switch (missionFlag)
@@ -345,7 +372,7 @@ int NAV_getGreen()
  *
  */
 
-void NAV_Setup()
+void setup()
 {
     pinMode(NAV_Infrared_1, INPUT); // IR Sensor 1
     pinMode(NAV_Infrared_2, INPUT); // IR Sensor 2
@@ -377,44 +404,52 @@ void NAV_Setup()
  * @brief this function is the main function of the navigation module
  *
  */
-void NAV_Main()
+void start()
 {
-    IR1 = digitalRead(NAV_Infrared_1);
-    IR2 = digitalRead(NAV_Infrared_2);
-    IR3 = digitalRead(NAV_Infrared_3);   // black IR reading 1 and no light
-    IR4 = digitalRead(NAV_Infrared_4);   // white IR reading 0 and light
-    IR5 = digitalRead(NAV_Infrared_5);
+        IR1 = digitalRead(NAV_Infrared_1);
+        IR2 = digitalRead(NAV_Infrared_2);
+        IR3 = digitalRead(NAV_Infrared_3);    // black IR reading 1 and no light
+        IR4 = digitalRead(NAV_Infrared_4);    // white IR reading 0 and light
+        IR5 = digitalRead(NAV_Infrared_5);
 
-    if (!IR2 && !IR3 && !IR4 && IR1&&IR5)
-    {
-        NAV_Move(70*1.8, 70*1.8, 'F'); // signal white //light -> no  signal
+        if (IR1 && !IR5){
+            Serial.println("Big Turn Right");   //big turn right
+            NAV_Move(50*speedFactor, 70*speedFactor, 'F');
+            delay(300);
+            last_move='R';
+        }
+        else if (!IR1 && IR5){
 
-        // no signal black
-    }
-    else if (IR2 && !IR3 && !IR4 && IR1 && IR5)
-    {
-        NAV_Move(50*1.8, 70*1.8, 'F');
-    }
-    else if (IR4&& !IR1 &&!IR2 && IR1 && IR5 )
-    {
-        NAV_Move(70*1.8, 50*1.8, 'F');
-    }
-    else if(!IR1){
-        NAV_Move(10*1.8 ,70*1.8 ,'F');
-
-    }
-    else if(!IR5){
-        NAV_Move(70*1.8 ,10*1.8 ,'F');
-
-    }
-    else if (!IR1&&!IR2&&!IR3&&!IR4&&!IR5)
-    {
-        NAV_Move(70*1.8, 70*1.8, 'B');
-    }
-    else
-    {
-        // do nothing
-    }
+            Serial.println("Big Turn Left");   //big turn left
+            NAV_Move(70*speedFactor ,30*speedFactor, 'F');
+            delay(300);
+            last_move='L';
+        }
+        else if((!IR1) && (!IR4) && (!IR5) && IR2){
+            Serial.println("Small Turn Right");  //small turn right
+            NAV_Move(50*speedFactor, 70*speedFactor, 'F');
+            delay(100);
+        }
+        else if((!IR1) && (!IR2) && (!IR5) && IR4){
+            Serial.println("Small Turn Left");//small turn left
+            NAV_Move(70*speedFactor, 50*speedFactor, 'F');
+            delay(100);
+        }
+        // else if(IR3 || (IR2&&IR4) || (IR1&&IR5)){
+        //     Serial.println("Straight Line");//straight line
+        //     NAV_Move(70*F, 70*F, 'F');
+        //     delay(200);
+        // }
+        else if(IR3&&IR2&&IR4 ){
+            Serial.println("Straight Line");//straight line
+            NAV_Move(70*speedFactor, 70*speedFactor, 'F');
+            delay(200);
+        }
+        else if((!IR1) && (!IR2) && (!IR3) && (!IR4) && (!IR5)){
+            Serial.println("REVERSE");//REVERSE
+            NAV_Move(70*speedFactor, 70*speedFactor, 'B');
+            delay(200);
+        }
 }
 
 void NAV_COLORSENSOR_TEST(){
