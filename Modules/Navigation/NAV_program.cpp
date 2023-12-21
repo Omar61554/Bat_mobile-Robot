@@ -39,6 +39,7 @@ private:
     int calibValuesPoliceChase[3]; // {red, green, blue}   
     int calibValuesJoker[3]; // {red, green, blue}
     int calibValuesRiddler[3]; // {red, green, blue}
+    int calibValuesWhite[3]; // {red, green, blue}
     //if abs(reading-calib value) < 20 -> select mission
     int NAV_Motor_R_Speed;
     int NAV_Motor_L_Speed;
@@ -58,7 +59,6 @@ public:
         int NAV_Motor_R_Speed = 0;
         char NAV_direction = 'f';
         float speedFactor = 1.8;
-
     }
     
     void NAV_Move(int NAV_Motor_R_Speed, int NAV_Motor_L_Speed, char NAV_direction){
@@ -197,12 +197,17 @@ public:
     //if (R > calibValueRed && G > calibValueGreen && B > calibValueBlue){
     
     //else if (R > calibValueRed){
-    if (R > 310 && G < 270 && B < 270){
+    if (abs(R-calibValuesJoker[0]) < 20 
+     && abs(G-calibValuesJoker[1]) < 20 
+     && abs(G-calibValuesJoker[2]) < 20){//(R > 310 && G < 270 && B < 270){
         //red
         return 1;
     }
     //else if (G > calibValueGreen){
-    else if(G > 300 && R < 300 && B < 260){
+    else if(abs(R-calibValuesRiddler[0]) < 20 
+         && abs(G-calibValuesRiddler[1]) < 20 
+         && abs(G-calibValuesRiddler[2]) < 20){;
+        //(G > 300 && R < 300 && B < 260){
     
         //green
         return 2;
@@ -213,11 +218,17 @@ public:
     //     return 3;
     // }
     //else if (R > calibValueRed && G > calibValueGreen){
-    else if(R > 340 && G > 320 && B < 290){
+    else if(abs(R-calibValuesPoliceChase[0]) < 20 
+         && abs(G-calibValuesPoliceChase[1]) < 20 
+         && abs(G-calibValuesPoliceChase[2]) < 20){
+        //(R > 340 && G > 320 && B < 290){
         //yellow
         return 4;
     }
-    else if (R > 310 && G > 320 && B > 320){
+    else if(abs(R-calibValuesWhite[0]) < 20 
+         && abs(G-calibValuesWhite[1]) < 20 
+         && abs(G-calibValuesWhite[2]) < 20){
+        //(R > 310 && G > 320 && B > 320)
         //white
         return 0;
     }
@@ -228,7 +239,7 @@ public:
 }
 
     void missionSelector(int colorValue = NAV_Color_Sensor()){
-        switch (colorValue)
+        switch (missionFlag)
         {
         case 0:
             Serial.println("White");//white
@@ -253,24 +264,24 @@ public:
     }
 
     void jokerMission(){
-    Serial.println("Joker Mission");
-    // implement joker mission here
-    if(last_move='R'){
-        NAV_Move(70*1.8, 70*1.8, 'B');
-        delay(600);
-        NAV_Move(10*1.8, 70*1.8, 'B');
-        delay(500);
-    }
-    else if(last_move='L'){
-        NAV_Move(70*1.8, 70*1.8, 'B');
-        delay(600);
-        NAV_Move(70*1.8, 10*1.8, 'B');
-        delay(500);
-    }
-    else{
-        //do nothing
-    }
-    }
+        Serial.println("Joker Mission");
+        // implement joker mission here
+        if(last_move='R'){
+            NAV_Move(70*1.8, 70*1.8, 'B');
+            delay(600);
+            NAV_Move(10*1.8, 70*1.8, 'B');
+            delay(500);
+        }
+        else if(last_move='L'){
+            NAV_Move(70*1.8, 70*1.8, 'B');
+            delay(600);
+            NAV_Move(70*1.8, 10*1.8, 'B');
+            delay(500);
+        }
+        else{
+            //do nothing
+        }
+        }
 
     void riddlerMission(){
         Serial.println("Riddler Mission");
@@ -296,6 +307,8 @@ public:
         Serial.println("Police Chase Mission");
         // implement police chase mission here
         speedFactor = 2.2;
+        
+        if()
         //IR_Sensor_Priority(2.2);
     }
 
