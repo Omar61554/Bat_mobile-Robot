@@ -176,6 +176,7 @@ void NAV_COLORSENSOR_TEST(){
 
 void IR_Sensor_Priority(float F){
     // IR5 IR4 IR3 IR2 IR1 //
+<<<<<<< Updated upstream
     IR1 = digitalRead(NAV_Infrared_1);
     IR2 = digitalRead(NAV_Infrared_2);
     IR3 = digitalRead(NAV_Infrared_3);    // black IR reading 1 and no light
@@ -187,10 +188,23 @@ void IR_Sensor_Priority(float F){
         NAV_Move(50*F, 70*F, 'F');
         delay(300);
         last_move='R';
+=======
+    IR1 = !digitalRead(NAV_Infrared_1);
+    IR2 = !digitalRead(NAV_Infrared_2);
+    IR3 = !digitalRead(NAV_Infrared_3);
+    IR4 = !digitalRead(NAV_Infrared_4);
+    IR5 = !digitalRead(NAV_Infrared_5);
+    float F = 1.5;
+    if (IR1 && !IR5){
+        Serial.println("Big Turn Right");   //big turn right
+        NAV_Move(70*F, 50*F, 'F');
+        delay(100);
+>>>>>>> Stashed changes
     }
     else if (!IR1 && IR5){
 
         Serial.println("Big Turn Left");   //big turn left
+<<<<<<< Updated upstream
         NAV_Move(70*F ,30*F, 'F');
         delay(300);
         last_move='L';
@@ -203,6 +217,19 @@ void IR_Sensor_Priority(float F){
     else if((!IR1) && (!IR2) && (!IR5) && IR4){
         Serial.println("Small Turn Left");//small turn left
         NAV_Move(70*F, 50*F, 'F');
+=======
+        NAV_Move(50*F ,70*F, 'F');
+        delay(100);
+    }
+    else if((!IR1) && (!IR4) && (!IR5) && IR2){
+        Serial.println("Small Turn Right");  //small turn right
+        NAV_Move(70*F, 60*F, 'F');
+        delay(100);
+    }
+    else if((!IR1) && (!IR2) && (!IR5) && IR4){
+        Serial.println("Small Turn Left");//small turn left
+        NAV_Move(60*F, 70*F, 'F');
+>>>>>>> Stashed changes
         delay(100);
     }
     // else if(IR3 || (IR2&&IR4) || (IR1&&IR5)){
@@ -319,7 +346,11 @@ void missionSelector(int colorValue = NAV_Color_Sensor()){
     switch (colorValue)
     {
     case 0:
+<<<<<<< Updated upstream
         Serial.println("White");//white
+=======
+        Serial.println("Whiteee");//white
+>>>>>>> Stashed changes
         break;
     case 1:
         jokerMission();     //red
