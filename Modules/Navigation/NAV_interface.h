@@ -40,6 +40,71 @@
 
 //int NAV_IR_Signal_R;
 //int NAV_IR_Signal_L;
+class Car{
+private:
+    int missionFlag; // 0 = no mission, 1 = joker, 2 = riddler, 3 = police chase
+    int IR1,IR2,IR3,IR4,IR5; // sensors from right to left: IR1 IR2 IR3 IR4 IR5
+    int calibValuesPoliceChase[3]; // {red, green, blue}   
+    int calibValuesJoker[3]; // {red, green, blue}
+    int calibValuesRiddler[3]; // {red, green, blue}
+    int calibValuesWhite[3]; // {red, green, blue}
+    //if abs(reading-calib value) < 20 -> select mission
+    int NAV_Motor_R_Speed;
+    int NAV_Motor_L_Speed;
+    char NAV_direction; 
+
+    float speedFactor; // multiply speed of motors by this value
+
+
+public:
+    //Constructor
+    Car();
+    void getSpeed();
+    void NAV_Move(int rightMotorSpeed, int leftMotorSpeed, char NAV_direction);
+    void setup();
+    void colorSensorCalibration();
+    
+    void controller();
+    int IR_Sensor_Priority();
+    void NAV_IR_TEST();
+
+    int NAV_Color_Sensor();
+    void missionSelector();
+
+    void jokerMission();
+
+    void riddlerMission();
+
+    void policeChaseMission();
+    void startMoving(int signal);
+};
+
+int NAV_getRed();
+int NAV_getBlue();
+int NAV_getGreen();
+
+/**
+ * @brief  this function is used to setup the navigation module
+ *
+ */
+
+
+/**
+ * @brief this function is the main function of the navigation module
+ *
+ */
+
+
+//void NAV_COLORSENSOR_TEST();
+
+
+
+
+
+
+
+
+
 
 //color sensor pins 
 #define NAV_Modes_s0 A4
@@ -106,31 +171,31 @@ void NAV_Setup();
  * @brief  this function is a test function for the motors
  * 
  */
-void NAV_Main();
+//void NAV_Main();
 
 /**
  * @brief  this function is the main function of the line follower
  * 
  */
-void IR_Sensor_Priority(float F);
+//void IR_Sensor_Priority(float F);
 
 /**
  * @brief  this function is used to test IR sensors
  * 
  */
-void NAV_IR_TEST();
+//void NAV_IR_TEST();
 
 /**
  * @brief  this function is used to detect the color
  * 
  */
-int NAV_Color_Sensor();
+//int NAV_Color_Sensor();
 
 /**
  * @brief  this function is used to select mission 
  * 
  */
-void missionSelector(int colorValue);
+//void missionSelector(int colorValue);
 
 /**
  * @brief  this function is used to call joker mission
