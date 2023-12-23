@@ -8,6 +8,7 @@
 #include "NAV_interface.h"
 #include "NAV_private.h"
 #include "NAV_configure.h"
+#include <math.h>
 #include <Arduino.h>
 
 //using namespace Car;
@@ -52,12 +53,19 @@ char last_move='W'; // R or L  don't let them know your next move
         int NAV_Motor_R_Speed = 0;
         char NAV_direction = 'F';
         float speedFactor = 1.3;
+        
+        bool policeFlag = false;
+        bool jokerMissionFlag = false;
+        bool signalFromSlave = false;
     }
     void Car::getSpeed(){
         Serial.print("Right speed: ");
         Serial.print(NAV_Motor_R_Speed);
         Serial.print("  Left speed: ");
         Serial.println(NAV_Motor_L_Speed);
+
+        Serial.print("Speed Factor: " );
+        Serial.println(speedFactor);
     }
     
     void Car::colorSensorCalibration(){
@@ -164,29 +172,29 @@ char last_move='W'; // R or L  don't let them know your next move
         if (IR1 && !IR5){
             Serial.println("Big Turn Right");   //big turn right
             return 2; //big turn right
-            NAV_Move(50*speedFactor, 70*speedFactor, 'F');
-            delay(300);
-            last_move='R';
+            // NAV_Move(50*speedFactor, 70*speedFactor, 'F');
+            // delay(300);
+            // last_move='R';
         }
         else if (!IR1 && IR5){
 
             Serial.println("Big Turn Left");   //big turn left
             return 3; //big turn left
-            NAV_Move(70*speedFactor ,30*speedFactor, 'F');
-            delay(300);
-            last_move='L';
+            // NAV_Move(70*speedFactor ,30*speedFactor, 'F');
+            // delay(300);
+            // last_move='L';
         }
         else if((!IR1) && (!IR4) && (!IR5) && IR2){
             Serial.println("Small Turn Right");  //small turn right
             return 4; //Small turn right
-            NAV_Move(50*speedFactor, 70*speedFactor, 'F');
-            delay(100);
+            // NAV_Move(50*speedFactor, 70*speedFactor, 'F');
+            // delay(100);
         }
         else if((!IR1) && (!IR2) && (!IR5) && IR4){
             Serial.println("Small Turn Left");//small turn left
             return 5; //Small turn left
-            NAV_Move(70*speedFactor, 50*speedFactor, 'F');
-            delay(100);
+            // NAV_Move(70*speedFactor, 50*speedFactor, 'F');
+            // delay(100);
         }
         // else if(IR3 || (IR2&&IR4) || (IR1&&IR5)){
         //     Serial.println("Straight Line");//straight line
@@ -196,14 +204,14 @@ char last_move='W'; // R or L  don't let them know your next move
         else if(IR3&&IR2&&IR4 ){
             Serial.println("Straight Line");//straight line
             return 1; //straight line code
-            NAV_Move(70*speedFactor, 70*speedFactor, 'F');
-            delay(200);
+            // NAV_Move(70*speedFactor, 70*speedFactor, 'F');
+            // delay(200);
         }
         else if((!IR1) && (!IR2) && (!IR3) && (!IR4) && (!IR5)){
             Serial.println("REVERSE");//REVERSE
             return 0;
-            NAV_Move(70*speedFactor, 70*speedFactor, 'B');
-            delay(200);
+            // NAV_Move(70*speedFactor, 70*speedFactor, 'B');
+            // delay(200);
         }
         //    
         // big_turn_right = IR1.not(IR5)
@@ -342,7 +350,37 @@ char last_move='W'; // R or L  don't let them know your next move
         }
     }
 
+    void Car::slaveReciever(){
+        //recieve signal from slave
+        signalFromSlave = digitalRead(slavePin);
+    }
+
     void Car::jokerMission(){
+        
+        //stop 
+        //send flag to slave to initiate shooting mechanism
+        //wait for signal from slave to continue
+        if (jokerMissionFlag == false){
+            while(!signalFromSlave){
+                //stop
+                NAV_Move(0, 0, 'F');
+                delay(100);
+                // ~recieve signal from slave~
+                //send flag to slave to initiate shooting mechanism
+                //wait for signal from slave to continue
+                //signalFromSlave = true;
+                slaveReciever();
+            }
+            if(signalFromSlave){
+                //turn 180 dont accept green signals again
+                NAV_Move(70,0,'B'); //turn 180???
+                delay(1000);
+                jokerMissionFlag = true;
+            }
+        }
+        else{
+            //do nothing
+        }
         Serial.println("Joker Mission");
         // implement joker mission here
         if(last_move='R'){
@@ -388,29 +426,44 @@ char last_move='W'; // R or L  don't let them know your next move
     unsigned long tock;
     tick = millis();
     tock = millis();
-    bool policeFlag = true;
     
+    if(policeFlag == true){
+        speedFactor = 1.7;
+        //mission ended
+        //2nd time yellow is detected -> end mission
+    }
+    unsigned long counter = 10000L + tick;
     if (!policeFlag){
-        while(abs(tock - tick) < 2000){
+        while(tick < counter){
             //move forward
             //Increase speed of motors
             speedFactor = 2.2;
             //IR_Sensor_Priority(2.2);
-
+            int signal = IR_Sensor_Priority();
+            startMoving(signal);
+            Serial.println("still inside loop");
+            getSpeed();
             //hinders signal from color sensor for 2 seconds to make sure the robot passes 
             //the first yellow line
+            Serial.print("tock: ");
+            Serial.print(tock);
+            Serial.print("  tick before updating: ");
+            Serial.println(tick);
             tick = millis();
+            Serial.print("tick after updating: ");
+            Serial.println(tick);
             }
         }
     //If color sensor detects black -> police Flag = true
     //if color sensor detects yellow again -> end mission
-    
-    else{
-        //end mission
-        speedFactor = 1.7;
-        //IR_Sensor_Priority(1.0);
-    }
+    Serial.println("outside loop");
     policeFlag = true;
+    // else{
+    //     //end mission
+    //     speedFactor = 1.7;
+    //     //IR_Sensor_Priority(1.0);
+    // }
+    // policeFlag = true;
     
     }
 

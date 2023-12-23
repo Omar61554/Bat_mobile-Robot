@@ -55,7 +55,7 @@ private:
 
     float speedFactor; // multiply speed of motors by this value
 
-
+    bool policeFlag; // true if detected first yellow color , false by default
 public:
     //Constructor
     Car();
