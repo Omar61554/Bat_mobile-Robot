@@ -334,7 +334,7 @@ char last_move='W'; // R or L  don't let them know your next move
 
 }
 
-void missionSelector(int colorValue = NAV_Color_Sensor()){
+void Car::missionSelector(int colorValue = NAV_Color_Sensor()){
     switch (colorValue)
     {
     case 0:
@@ -362,7 +362,7 @@ void missionSelector(int colorValue = NAV_Color_Sensor()){
         break;
 
     }
-
+}
     void Car::missionSelector(){
         switch (missionFlag)
         {
