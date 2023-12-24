@@ -52,10 +52,11 @@ char last_move='W'; // R or L  don't let them know your next move
         int NAV_Motor_L_Speed = 0;
         int NAV_Motor_R_Speed = 0;
         char NAV_direction = 'F';
-        float speedFactor = 1.3;
+        float speedFactor = 1.8;
         
         bool policeFlag = false;
         bool jokerMissionFlag = false;
+        bool riddlerMissionFlag = false;
         int signalFromSlave = 0;
     }
     void Car::getSpeed(){
@@ -404,23 +405,39 @@ char last_move='W'; // R or L  don't let them know your next move
         }
 
     void Car::riddlerMission(){
-        Serial.println("Riddler Mission");
-        // implement riddler mission here
-        if(last_move='R'){
-            NAV_Move(70*1.8, 70*1.8, 'B');
-            delay(600);
-            NAV_Move(10*1.8, 70*1.8, 'B');
-            delay(500);
-        }
-        else if(last_move='L'){
-            NAV_Move(70*1.8, 70*1.8, 'B');
-            delay(600);
-            NAV_Move(70*1.8, 10*1.8, 'B');
-            delay(500);
+        
+        //stop 
+        //send flag to slave to initiate shooting mechanism
+        //wait for signal from slave to continue
+        if (riddlerMissionFlag == false){
+            while(signalFromSlave != 321){
+                //stop
+                NAV_Move(0, 0, 'F');
+                getSpeed();
+                Serial.println("inside signal slave loop");
+                //send flag to slave to initiate shooting mechanism
+                Serial.write('S'); //start shooting mechanism for joker mission
+                
+                // ~recieve signal from slave~
+                //wait for signal from slave to continue
+                slaveReciever();
+                if(signalFromSlave == 321){
+                    //turn 180 dont accept green signals again
+                    NAV_Move(70,0,'B'); //turn 180???
+                    delay(1000);
+                    NAV_Move(70,70,'F'); //move forward to get away from green circle
+                    delay(100); 
+                    riddlerMissionFlag = true;
+                }
+                delay(100);
+            }
+            
         }
         else{
             //do nothing
+            Serial.println("Riddler Mission Ended");
         }
+        
     }
 
     void Car::policeChaseMission(){
@@ -473,15 +490,15 @@ char last_move='W'; // R or L  don't let them know your next move
         
         switch(signal){
         case 0:
-            //reverse
-            Serial.println("REVERSE");//REVERSE
+            
+            Serial.println("REVERSE"); //REVERSE
             NAV_Move(70*speedFactor, 70*speedFactor, 'B');
             delay(200);
             break;
         
         case 1:
             //straight line
-            Serial.println("Straight Line");//straight line
+            Serial.println("Straight Line"); //straight line
             NAV_Move(70*speedFactor, 70*speedFactor, 'F');
             delay(200);
             break;

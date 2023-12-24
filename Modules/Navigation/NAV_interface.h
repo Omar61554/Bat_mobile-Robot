@@ -53,10 +53,11 @@ private:
     int NAV_Motor_L_Speed;
     char NAV_direction; 
 
-    float speedFactor; // multiply speed of motors by this value
+    float speedFactor = 1.8; // multiply speed of motors by this value
 
     bool policeFlag; // true if detected first yellow color , false by default
     bool jokerMissionFlag;
+    bool riddlerMissionFlag;
 
 public:
     //Constructor
