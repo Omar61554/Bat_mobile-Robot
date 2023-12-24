@@ -11,7 +11,7 @@
 #include <math.h>
 #include <Arduino.h>
 
-//using namespace Car;
+
 //#include "../STD_ATYPES.hpp"
 
 //********************************************************************************************************************//
@@ -248,7 +248,12 @@ char last_move='W'; // R or L  don't let them know your next move
         // read IR4
         // read IR5
 
-    }
+      }
+
+
+
+    
+
 
     void Car::NAV_IR_TEST(){
         // IR5 IR4 IR3 IR2 IR1 //
@@ -268,6 +273,7 @@ char last_move='W'; // R or L  don't let them know your next move
         Serial.print(" IR5 = ");
         Serial.println(IR5);
         delay(1000);
+
     }
 
     int Car::NAV_Color_Sensor(){
@@ -324,6 +330,37 @@ char last_move='W'; // R or L  don't let them know your next move
         //black
         return 5;
     }
+
+
+}
+
+void missionSelector(int colorValue = NAV_Color_Sensor()){
+    switch (colorValue)
+    {
+    case 0:
+        Serial.println("Whiteee");//white
+        break;
+    case 1:
+        jokerMission();     //red
+        break;
+    case 2:
+        riddlerMission();   //green
+        break;
+    case 3:
+        //blue
+        break;
+    case 4:
+        //yellow
+
+        policeChaseMission();
+        
+        
+        //check for second time it detects yellow to end the mission
+        break;
+    default:
+        Serial.println("black");
+        break;
+
     }
 
     void Car::missionSelector(){
@@ -584,12 +621,4 @@ void NAV_COLORSENSOR_TEST(){
 
 
 }
-
-
-
-
-
-
-
-
 
