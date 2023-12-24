@@ -56,14 +56,20 @@ private:
     float speedFactor; // multiply speed of motors by this value
 
     bool policeFlag; // true if detected first yellow color , false by default
+    bool jokerMissionFlag;
+
 public:
     //Constructor
+    int signalFromSlave;
     Car();
+    
     void getSpeed();
     void NAV_Move(int rightMotorSpeed, int leftMotorSpeed, char NAV_direction);
     void setup();
     void colorSensorCalibration();
     
+    void slaveReciever();
+
     void controller();
     int IR_Sensor_Priority();
     void NAV_IR_TEST();

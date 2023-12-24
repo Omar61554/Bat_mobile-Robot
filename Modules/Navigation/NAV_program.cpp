@@ -56,7 +56,7 @@ char last_move='W'; // R or L  don't let them know your next move
         
         bool policeFlag = false;
         bool jokerMissionFlag = false;
-        bool signalFromSlave = false;
+        int signalFromSlave = 0;
     }
     void Car::getSpeed(){
         Serial.print("Right speed: ");
@@ -138,15 +138,21 @@ char last_move='W'; // R or L  don't let them know your next move
         IR readings -> (outputs control actions (staight line, big turn right))
         startMoving takes in IR readings -> outputs motor signals  
         */
-        //ir sensors readings
-        //int IRReading = IR_Sensor_Priority();
-        //NAV_IR_TEST();
-        //
-        int colorValue = NAV_Color_Sensor();
+        //Reads from the 5 IR sensors and outputs control actions (staight line, big turn right)
+        // 0 = Reverse 1 = Straight line 2 = Big turn right 
+        // 3 = Big turn left 4 = Small turn right 5 = Small turn left
+        int IRReading = IR_Sensor_Priority();
         
-        missionFlag = colorValue;
+        
+        //Reads from the color sensor and outputs mission flag 
+        //(0 = no mission, 1 = joker, 2 = riddler, 3 = police chase)
+        missionFlag = NAV_Color_Sensor();
+        
+        //Selects mission based on mission flag and initiates the mission
         missionSelector();
-        //startMoving(IRReading);
+
+        //Takes control actions from IR_Sensor_Priority and outputs motor signals & speeds
+        startMoving(IRReading);
         //color sensors readings
         //mission selector
         //nav move
@@ -334,14 +340,11 @@ char last_move='W'; // R or L  don't let them know your next move
             //riddlerMission();   //green
             break;
         case 3:
-            //blue
-            break;
-        case 4:
             Serial.println("Police Chase Mission");
             //policeChaseMission();//yellow
             //check for second time it detects yellow to end the mission
             break;
-        case 5:
+        case 4:
             Serial.println("Blackkkkk real");//black
             break;
         default:
@@ -352,7 +355,16 @@ char last_move='W'; // R or L  don't let them know your next move
 
     void Car::slaveReciever(){
         //recieve signal from slave
-        signalFromSlave = digitalRead(slavePin);
+        //signalFromSlave = Serial.read();
+        //signalFromSlave += 1;
+        //Serial.println(signalFromSlave);
+        if(Serial.available() > 0){
+            signalFromSlave = Serial.read();
+            Serial.println(signalFromSlave);
+        }
+        else{
+            //do nothing
+        }
     }
 
     void Car::jokerMission(){
@@ -361,43 +373,34 @@ char last_move='W'; // R or L  don't let them know your next move
         //send flag to slave to initiate shooting mechanism
         //wait for signal from slave to continue
         if (jokerMissionFlag == false){
-            while(!signalFromSlave){
+            while(signalFromSlave != 123){
                 //stop
                 NAV_Move(0, 0, 'F');
-                delay(100);
-                // ~recieve signal from slave~
+                getSpeed();
+                Serial.println("inside signal slave loop");
                 //send flag to slave to initiate shooting mechanism
+                Serial.write('S'); //start shooting mechanism for joker mission
+                
+                // ~recieve signal from slave~
                 //wait for signal from slave to continue
-                //signalFromSlave = true;
                 slaveReciever();
+                if(signalFromSlave == 123){
+                    //turn 180 dont accept green signals again
+                    NAV_Move(70,0,'B'); //turn 180???
+                    delay(1000);
+                    NAV_Move(70,70,'F'); //move forward to get away from green circle
+                    delay(100); 
+                    jokerMissionFlag = true;
+                }
+                delay(100);
             }
-            if(signalFromSlave){
-                //turn 180 dont accept green signals again
-                NAV_Move(70,0,'B'); //turn 180???
-                delay(1000);
-                jokerMissionFlag = true;
-            }
+            
         }
         else{
             //do nothing
+            Serial.println("Joker Mission Ended");
         }
-        Serial.println("Joker Mission");
-        // implement joker mission here
-        if(last_move='R'){
-            NAV_Move(70*1.8, 70*1.8, 'B');
-            delay(600);
-            NAV_Move(10*1.8, 70*1.8, 'B');
-            delay(500);
-        }
-        else if(last_move='L'){
-            NAV_Move(70*1.8, 70*1.8, 'B');
-            delay(600);
-            NAV_Move(70*1.8, 10*1.8, 'B');
-            delay(500);
-        }
-        else{
-            //do nothing
-        }
+        
         }
 
     void Car::riddlerMission(){
@@ -423,16 +426,16 @@ char last_move='W'; // R or L  don't let them know your next move
     void Car::policeChaseMission(){
         // implement police chase mission here
     unsigned long tick;
-    unsigned long tock;
+    
     tick = millis();
-    tock = millis();
+    
     
     if(policeFlag == true){
         speedFactor = 1.7;
         //mission ended
         //2nd time yellow is detected -> end mission
     }
-    unsigned long counter = 10000L + tick;
+    unsigned long counter = 3000L + tick;
     if (!policeFlag){
         while(tick < counter){
             //move forward
@@ -443,10 +446,9 @@ char last_move='W'; // R or L  don't let them know your next move
             startMoving(signal);
             Serial.println("still inside loop");
             getSpeed();
-            //hinders signal from color sensor for 2 seconds to make sure the robot passes 
+            //hinders signal from color sensor for 3 seconds to make sure the robot passes 
             //the first yellow line
-            Serial.print("tock: ");
-            Serial.print(tock);
+            
             Serial.print("  tick before updating: ");
             Serial.println(tick);
             tick = millis();
@@ -454,7 +456,7 @@ char last_move='W'; // R or L  don't let them know your next move
             Serial.println(tick);
             }
         }
-    //If color sensor detects black -> police Flag = true
+    
     //if color sensor detects yellow again -> end mission
     Serial.println("outside loop");
     policeFlag = true;
@@ -487,7 +489,7 @@ char last_move='W'; // R or L  don't let them know your next move
         case 2:
             //big turn right
             Serial.println("Big Turn Right");   //big turn right
-            NAV_Move(50*speedFactor, 70*speedFactor, 'F');
+            NAV_Move(30*speedFactor, 70*speedFactor, 'F');
             delay(300);
             last_move='R';
             break;
