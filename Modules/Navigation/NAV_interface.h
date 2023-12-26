@@ -27,6 +27,13 @@
 #define NAV_Infrared_4 12 //signal pin from IR Sensor 4
 #define NAV_Infrared_5 13 //signal pin from IR Sensor 5
 
+//color sensor pins 
+#define NAV_Modes_s0 A4
+#define NAV_Modes_s1 A3
+#define NAV_Color_s2 A1
+#define NAV_Color_s3 A2
+#define NAV_colorSensor_out  A0
+
 //IR Sensor values
 // int IR1;
 // int IR2;
@@ -113,12 +120,7 @@ int NAV_getGreen();
 
 
 
-//color sensor pins 
-#define NAV_Modes_s0 A1
-#define NAV_Modes_s1 A2
-#define NAV_Color_s2 A3
-#define NAV_Color_s3 A4
-#define NAV_colorSensor_out  A5
+
 
 //color sensor values
 // int calibValueRed ;
