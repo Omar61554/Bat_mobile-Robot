@@ -13,19 +13,19 @@
 // defines of NAV_pins
 
 //Motor pins
-#define NAV_Motor_R_Enable 9 //Enable signal Right motor //white
-#define NAV_Motor_R_Right 7 //direction 1 Right motor   //black
-#define NAV_Motor_R_Left 8 //direction 2 Right motor    //yellow
-#define NAV_Motor_L_Enable 11 //Enable signal left motor // violet
-#define NAV_Motor_L_Right 12 //direction 1 left motor    //blue
-#define NAV_Motor_L_Left 13 //direction 2 Left motor    // green
+#define NAV_Motor_R_Enable 2 //Enable signal Right motor //white
+#define NAV_Motor_R_Right 3 //direction 1 Right motor   //black
+#define NAV_Motor_R_Left 4 //direction 2 Right motor    //yellow
+#define NAV_Motor_L_Enable 7 //Enable signal left motor // violet
+#define NAV_Motor_L_Right 8 //direction 1 left motor    //blue
+#define NAV_Motor_L_Left 5 //direction 2 Left motor    // green
 
 //IR Sensor pins
-#define NAV_Infrared_1 2 //signal pin from IR Sensor 1
-#define NAV_Infrared_2 3 //signal pin from IR Sensor 2
-#define NAV_Infrared_3 4 //signal pin from IR Sensor 3
-#define NAV_Infrared_4 5 //signal pin from IR Sensor 4
-#define NAV_Infrared_5 6 //signal pin from IR Sensor 5
+#define NAV_Infrared_1 9 //signal pin from IR Sensor 1
+#define NAV_Infrared_2 10 //signal pin from IR Sensor 2
+#define NAV_Infrared_3 11 //signal pin from IR Sensor 3
+#define NAV_Infrared_4 12 //signal pin from IR Sensor 4
+#define NAV_Infrared_5 13 //signal pin from IR Sensor 5
 
 //IR Sensor values
 // int IR1;
@@ -114,11 +114,11 @@ int NAV_getGreen();
 
 
 //color sensor pins 
-#define NAV_Modes_s0 A4
-#define NAV_Modes_s1 A3
-#define NAV_Color_s2 A1
-#define NAV_Color_s3 A2
-#define NAV_colorSensor_out  A0
+#define NAV_Modes_s0 A1
+#define NAV_Modes_s1 A2
+#define NAV_Color_s2 A3
+#define NAV_Color_s3 A4
+#define NAV_colorSensor_out  A5
 
 //color sensor values
 // int calibValueRed ;
