@@ -52,7 +52,7 @@ char last_move='W'; // R or L  don't let them know your next move
         int NAV_Motor_L_Speed = 0;
         int NAV_Motor_R_Speed = 0;
         char NAV_direction = 'F';
-        float speedFactor = 1.8;
+        float speedFactor = 1.2;
         
         bool policeFlag = false;
         bool jokerMissionFlag = false;
@@ -142,18 +142,39 @@ char last_move='W'; // R or L  don't let them know your next move
         //Reads from the 5 IR sensors and outputs control actions (staight line, big turn right)
         // 0 = Reverse 1 = Straight line 2 = Big turn right 
         // 3 = Big turn left 4 = Small turn right 5 = Small turn left
+        unsigned long tick = millis();
+        unsigned long tock = millis();
+        
+        tock = millis();
+        Serial.print("Loop start time: ");
+        Serial.println(tock - tick);
+
         int IRReading = IR_Sensor_Priority();
         
-        
+        // tock = millis();
+        // Serial.print("Time taken in IR priority: ");
+        // Serial.println(tock - tick);
         //Reads from the color sensor and outputs mission flag 
         //(0 = no mission, 1 = joker, 2 = riddler, 3 = police chase)
         missionFlag = NAV_Color_Sensor();
-        
+        //missionFlag = 0;
+        // tock = millis();
+        // Serial.print("Time taken in color sensor function: ");
+        // Serial.println(tock - tick);
+
         //Selects mission based on mission flag and initiates the mission
         missionSelector();
 
+        // tock = millis();
+        // Serial.print("Time taken in mission selector function: ");
+        // Serial.println(tock - tick);
+
         //Takes control actions from IR_Sensor_Priority and outputs motor signals & speeds
         startMoving(IRReading);
+
+        // tock = millis();
+        // Serial.print("Time taken in start moving function: ");
+        // Serial.println(tock - tick);
         //color sensors readings
         //mission selector
         //nav move
@@ -172,7 +193,7 @@ char last_move='W'; // R or L  don't let them know your next move
 
         IR1 = digitalRead(NAV_Infrared_1);
         IR2 = digitalRead(NAV_Infrared_2);
-        IR3 = digitalRead(NAV_Infrared_3);    // black IR reading 1 and no light
+        IR3 = !digitalRead(NAV_Infrared_3);    // black IR reading 1 and no light
         IR4 = digitalRead(NAV_Infrared_4);    // white IR reading 0 and light
         IR5 = digitalRead(NAV_Infrared_5);
 
@@ -214,7 +235,7 @@ char last_move='W'; // R or L  don't let them know your next move
             // NAV_Move(70*speedFactor, 70*speedFactor, 'F');
             // delay(200);
         }
-        else if((!IR1) && (!IR2) && (!IR3) && (!IR4) && (!IR5)){
+        else if((!IR1) && (!IR2) && (!IR4) && (!IR5)){ // (!IR3) && (Removed IR3 sensor because it is not working!!)
             Serial.println("REVERSE");//REVERSE
             return 0;
             // NAV_Move(70*speedFactor, 70*speedFactor, 'B');
@@ -285,9 +306,26 @@ char last_move='W'; // R or L  don't let them know your next move
     4=yellow
     5=black
     */
+    unsigned long shik = millis();
+    unsigned long shak = millis();
+
     int R = NAV_getRed();
+    shak = millis();
+    Serial.print("Get red time: ");
+    Serial.println(shak - shik);
+    shik = millis();
+
     int G = NAV_getGreen();
+    shak = millis();
+    Serial.print("Get green time: ");
+    Serial.println(shak - shik);
+    shik = millis();
+
     int B = NAV_getBlue();  
+    shak = millis();
+    Serial.print("Get blue time: ");
+    Serial.println(shak - shik);
+    shik = millis();
     //if (R > calibValueRed && G > calibValueGreen && B > calibValueBlue){
     
     //else if (R > calibValueRed){
@@ -334,35 +372,35 @@ char last_move='W'; // R or L  don't let them know your next move
 
 }
 
-void Car::missionSelector(int colorValue = NAV_Color_Sensor()){
-    switch (colorValue)
-    {
-    case 0:
-        Serial.println("Whiteee");//white
-        break;
-    case 1:
-        jokerMission();     //red
-        break;
-    case 2:
-        riddlerMission();   //green
-        break;
-    case 3:
-        //blue
-        break;
-    case 4:
-        //yellow
+// void Car::missionSelector(){
+//     switch (colorValue)
+//     {
+//     case 0:
+//         Serial.println("Whiteee");//white
+//         break;
+//     case 1:
+//         jokerMission();     //red
+//         break;
+//     case 2:
+//         riddlerMission();   //green
+//         break;
+//     case 3:
+//         //blue
+//         break;
+//     case 4:
+//         //yellow
 
-        policeChaseMission();
+//         policeChaseMission();
         
         
-        //check for second time it detects yellow to end the mission
-        break;
-    default:
-        Serial.println("black");
-        break;
+//         //check for second time it detects yellow to end the mission
+//         break;
+//     default:
+//         Serial.println("black");
+//         break;
 
-    }
-}
+//     }
+// }
     void Car::missionSelector(){
         switch (missionFlag)
         {
@@ -524,27 +562,34 @@ void Car::missionSelector(int colorValue = NAV_Color_Sensor()){
     }
 
     void Car::startMoving(int signal){ //gives signals to motors with speed
-        
+        /*
+        0 = Reverse
+        1 = Straight line
+        2 = Big turn right
+        3 = Big turn left
+        4 = Small turn right
+        5 = Small turn left
+        */
         switch(signal){
         case 0:
             
             Serial.println("REVERSE"); //REVERSE
             NAV_Move(70*speedFactor, 70*speedFactor, 'B');
-            delay(200);
+            delay(80);
             break;
         
         case 1:
             //straight line
             Serial.println("Straight Line"); //straight line
             NAV_Move(70*speedFactor, 70*speedFactor, 'F');
-            delay(200);
+            delay(30);
             break;
         
         case 2:
             //big turn right
             Serial.println("Big Turn Right");   //big turn right
             NAV_Move(30*speedFactor, 70*speedFactor, 'F');
-            delay(300);
+            delay(430);
             last_move='R';
             break;
 
@@ -552,22 +597,28 @@ void Car::missionSelector(int colorValue = NAV_Color_Sensor()){
             //big turn left
             Serial.println("Big Turn Left");   //big turn left
             NAV_Move(70*speedFactor ,30*speedFactor, 'F');
-            delay(300);
+            delay(430);
             last_move='L';
             break;
 
         case 4:
             //small turn right
             Serial.println("Small Turn Right");  //small turn right
-            NAV_Move(50*speedFactor, 70*speedFactor, 'F');
-            delay(100);
+            NAV_Move(60*speedFactor, 70*speedFactor, 'F');
+            delay(30);
             break;
 
         case 5:
             //small turn left
             Serial.println("Small Turn Left");//small turn left
-            NAV_Move(70*speedFactor, 50*speedFactor, 'F');
-            delay(100);
+            NAV_Move(70*speedFactor, 60*speedFactor, 'F');
+            delay(30);
+            break;
+        
+        default:
+            //NAV_Move(50*speedFactor, 50*speedFactor, 'F');
+            //delay(100);
+            //do nothing
             break;
         }
 };
@@ -576,7 +627,7 @@ int NAV_getRed()
 {
     digitalWrite(NAV_Color_s2, LOW);
     digitalWrite(NAV_Color_s3, LOW);
-    int PW = pulseIn(NAV_colorSensor_out, LOW);
+    int PW = pulseIn(NAV_colorSensor_out, LOW);//,5000);
     PW = map(PW, 79, 215, 255, 0);
     return PW;
 }
@@ -584,7 +635,7 @@ int NAV_getBlue()
 {
     digitalWrite(NAV_Color_s2, LOW);
     digitalWrite(NAV_Color_s3, HIGH);
-    int PW = pulseIn(NAV_colorSensor_out, LOW);
+    int PW = pulseIn(NAV_colorSensor_out, LOW);// ,5000);
     PW = map(PW, 65, 171, 255, 0);
     return PW;
 }
@@ -593,7 +644,7 @@ int NAV_getGreen()
     digitalWrite(NAV_Color_s2, HIGH);
     digitalWrite(NAV_Color_s3, HIGH); // white R= 79 G =74 B =65
                                       //  black R= 215 G =202 B =171
-    int PW = pulseIn(NAV_colorSensor_out, LOW);
+    int PW = pulseIn(NAV_colorSensor_out, LOW);//,5000);//analogRead(NAV_colorSensor_out);//pulseIn(NAV_colorSensor_out, LOW);
     PW = map(PW, 74, 202, 255, 0);
     return PW;
 }

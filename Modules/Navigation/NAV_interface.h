@@ -13,12 +13,12 @@
 // defines of NAV_pins
 
 //Motor pins
-#define NAV_Motor_R_Enable 2 //Enable signal Right motor //white
-#define NAV_Motor_R_Right 3 //direction 1 Right motor   //black
-#define NAV_Motor_R_Left 4 //direction 2 Right motor    //yellow
-#define NAV_Motor_L_Enable 7 //Enable signal left motor // violet
-#define NAV_Motor_L_Right 8 //direction 1 left motor    //blue
-#define NAV_Motor_L_Left 5 //direction 2 Left motor    // green
+#define NAV_Motor_R_Enable 5 //Enable signal Right motor //white
+#define NAV_Motor_R_Right 8 //direction 1 Right motor   //black
+#define NAV_Motor_R_Left 7 //direction 2 Right motor    //yellow
+#define NAV_Motor_L_Enable 3 //Enable signal left motor // violet
+#define NAV_Motor_L_Right 4 //direction 1 left motor    //blue
+#define NAV_Motor_L_Left 2 //direction 2 Left motor    // green
 
 //IR Sensor pins
 #define NAV_Infrared_1 9 //signal pin from IR Sensor 1
@@ -28,11 +28,11 @@
 #define NAV_Infrared_5 13 //signal pin from IR Sensor 5
 
 //color sensor pins 
-#define NAV_Modes_s0 A4
-#define NAV_Modes_s1 A3
-#define NAV_Color_s2 A1
-#define NAV_Color_s3 A2
-#define NAV_colorSensor_out  A0
+#define NAV_Modes_s0 A5
+#define NAV_Modes_s1 A4
+#define NAV_Color_s2 A2
+#define NAV_Color_s3 A1
+#define NAV_colorSensor_out  A3
 
 //IR Sensor values
 // int IR1;
@@ -60,7 +60,7 @@ private:
     int NAV_Motor_L_Speed;
     char NAV_direction; 
 
-    float speedFactor = 1.8; // multiply speed of motors by this value
+    float speedFactor = 1.2; // multiply speed of motors by this value
 
     bool policeFlag; // true if detected first yellow color , false by default
     bool jokerMissionFlag;
