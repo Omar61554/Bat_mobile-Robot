@@ -29,10 +29,15 @@
 
 //color sensor pins 
 #define NAV_Modes_s0 A5
-#define NAV_Modes_s1 A4
-#define NAV_Color_s2 A2
-#define NAV_Color_s3 A1
-#define NAV_colorSensor_out  A3
+ #define NAV_Modes_s1 A4
+ #define NAV_Color_s2 A2
+ #define NAV_Color_s3 A1
+ #define NAV_colorSensor_out  A3
+// #define NAV_Modes_s0 9
+// #define NAV_Modes_s1 8
+// #define NAV_Color_s2 6
+// #define NAV_Color_s3 5
+// #define NAV_colorSensor_out A5
 
 //IR Sensor values
 // int IR1;
@@ -51,16 +56,13 @@ class Car{
 private:
     int missionFlag; // 0 = no mission, 1 = joker, 2 = riddler, 3 = police chase
     int IR1,IR2,IR3,IR4,IR5; // sensors from right to left: IR1 IR2 IR3 IR4 IR5
-    int calibValuesPoliceChase[3]; // {red, green, blue}   
-    int calibValuesJoker[3]; // {red, green, blue}
-    int calibValuesRiddler[3]; // {red, green, blue}
-    int calibValuesWhite[3]; // {red, green, blue}
+    
     //if abs(reading-calib value) < 20 -> select mission
     int NAV_Motor_R_Speed;
     int NAV_Motor_L_Speed;
     char NAV_direction; 
 
-    float speedFactor = 1.2; // multiply speed of motors by this value
+    float speedFactor = 1.1; // multiply speed of motors by this value
 
     bool policeFlag; // true if detected first yellow color , false by default
     bool jokerMissionFlag;
@@ -69,6 +71,10 @@ private:
 public:
     //Constructor
     int signalFromSlave;
+    int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
+    int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
+    int calibValuesRiddler[3] = {279, 312, 239}; //(G > 300 && R < 300 && B < 260){
+    int calibValuesWhite[3]; // {red, green, blue}
     Car();
     
     void getSpeed();
