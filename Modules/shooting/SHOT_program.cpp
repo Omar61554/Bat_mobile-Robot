@@ -34,11 +34,15 @@ void SHOT_selectBall(char checkColor)
     if(checkColor=='J'){
     servo1.write(90);
     delay(1000);
+
+    Serial.write('D');  //signal to master arduino that the ball is shot & mission completed
     }
     // if ball is green rotate servo to -90 degree
     else if(checkColor=='R'){
     servo1.write(-90);
     delay(1000);
+
+    Serial.write('D');  //signal to master arduino that the ball is shot & mission completed
     }
 
 }

@@ -44,7 +44,7 @@ if(distance<100)
         // send via bluetooth module to arduino to open the barrier
 
 
-        mySerial.write('O');
+        mySerial.write('O'); //recieve this message in master arduino to stop the car for a moment
     return 'O';
 }
 else

@@ -20,6 +20,10 @@
 #define NAV_Motor_L_Right 12 //direction 1 left motor    //blue
 #define NAV_Motor_L_Left 13 //direction 2 Left motor    // green
 
+//Speeds for missions
+#define normalSpeed 1.5
+#define maxSpeed 2.2
+
 //IR Sensor pins
 #define NAV_Infrared_1 2 //signal pin from IR Sensor 1
 #define NAV_Infrared_2 3 //signal pin from IR Sensor 2
