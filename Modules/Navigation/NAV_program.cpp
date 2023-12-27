@@ -277,13 +277,9 @@ char last_move='W'; // R or L  don't let them know your next move
     }
 
     void Car::slaveReciever(){
-        //recieve signal from slave
-        //signalFromSlave = Serial.read();
-        //signalFromSlave += 1;
-        //Serial.println(signalFromSlave);
+        
         if(Serial.available() > 0){
             signalFromSlave = Serial.read();
-            //Serial.println(signalFromSlave);
         }
         else{
             //do nothing
@@ -291,32 +287,34 @@ char last_move='W'; // R or L  don't let them know your next move
     }
 
     void Car::jokerMission(){
-        
         //stop 
         //send flag to slave to initiate shooting mechanism
         //wait for signal from slave to continue
-        NAV_Move(0, 0, 'F');
-        delay(4000);
+
+        unsigned long tick = millis();
+        unsigned long tock = millis();
+
         if (jokerMissionFlag == false){
             while(signalFromSlave != 'D'){
-                //stop
+                
                 NAV_Move(0, 0, 'F');
-                //getSpeed();
-                // Serial.println("inside signal slave loop");
                 //send flag to slave to initiate shooting mechanism
                 Serial.write('J'); //start shooting mechanism for joker mission
                 
                 // ~recieve signal from slave~
                 //wait for signal from slave to continue
                 slaveReciever();
-                delay(1000);
-                NAV_Move(70,70,'B'); //turn 180???
-                delay(1000);
-                if(last_move=='R'){
+                
+                
+                if(last_move=='R' && (signalFromSlave != 'D')){
+                    NAV_Move(70,70,'B'); //turn 180???
+                    delay(1000);
                     NAV_Move(70,0,'L'); //turn 90 left
                     delay(1000);
                 }
                 else if(last_move=='L'){
+                    NAV_Move(70,70,'B'); //turn 180???
+                    delay(1000);
                     NAV_Move(0,70,'R'); //turn 90 right
                     delay(1000);
                 }
