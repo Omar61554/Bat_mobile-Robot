@@ -1,0 +1,159 @@
+{
+  "main": {
+    "id": "fc3aec1d51b39734",
+    "type": "split",
+    "children": [
+      {
+        "id": "ce028ded2aca37c8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "233636401e0a7864",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "0e75f711aa7283d0",
+    "type": "split",
+    "children": [
+      {
+        "id": "198e740e9e89b6dd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a2ee06f40c1d0f41",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "9f66904741eecd3f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "7b0454d9452128ba",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "28f795a48b63c81f",
+    "type": "split",
+    "children": [
+      {
+        "id": "06315623ac89592a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cd73f8af889e3b31",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "1e5c24d31ce836dd",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "3223e6e16ec9ac8b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "08efc0aa9670d4d4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "233636401e0a7864",
+  "lastOpenFiles": [
+    "Frame.md",
+    "Testing every module separately.md",
+    "Untitled 2.canvas",
+    "Untitled 1.canvas",
+    "Untitled.canvas",
+    "Linking.md",
+    "Navigation.md",
+    "police chase.md",
+    "Body.md",
+    "Wiring coding.md",
+    "Design and Manufacturing.md",
+    "Intro to Mechatronics Batmobile.md",
+    "Schematic and Coding.md",
+    "Testing.md"
+  ]
+}
