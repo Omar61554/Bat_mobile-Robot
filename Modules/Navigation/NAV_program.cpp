@@ -60,7 +60,7 @@ char last_move='W'; // R or L  don't let them know your next move
         int NAV_Motor_L_Speed = 0;
         int NAV_Motor_R_Speed = 0;
         char NAV_direction = 'F';
-        float speedFactor = 1.2;
+        float speedFactor = 1.0;
         
         bool policeFlag = false;
         bool jokerMissionFlag = false;
@@ -157,7 +157,7 @@ char last_move='W'; // R or L  don't let them know your next move
         //Serial.print("Loop start time: ");
         //Serial.println(tock - tick);
 
-        //int IRReading = IR_Sensor_Priority();
+        int IRReading = IR_Sensor_Priority();
         
         // tock = millis();
         // Serial.print("Time taken in IR priority: ");
@@ -178,7 +178,7 @@ char last_move='W'; // R or L  don't let them know your next move
         // Serial.println(tock - tick);
 
         //Takes control actions from IR_Sensor_Priority and outputs motor signals & speeds
-        //startMoving(IRReading);
+        startMoving(IRReading);
 
         // tock = millis();
         // Serial.print("Time taken in start moving function: ");
@@ -437,7 +437,7 @@ char last_move='W'; // R or L  don't let them know your next move
             //     NAV_Move(0,0,'F');
             //     delay(4000);}
             // policeFlag = true;
-            //policeChaseMission();//yellow
+            policeChaseMission();//yellow
             //check for second time it detects yellow to end the mission
             break;
         case 4:
@@ -468,6 +468,8 @@ char last_move='W'; // R or L  don't let them know your next move
         //stop 
         //send flag to slave to initiate shooting mechanism
         //wait for signal from slave to continue
+        NAV_Move(0, 0, 'F');
+        delay(4000);
         if (jokerMissionFlag == false){
             while(signalFromSlave != 'D'){
                 //stop
@@ -480,14 +482,31 @@ char last_move='W'; // R or L  don't let them know your next move
                 // ~recieve signal from slave~
                 //wait for signal from slave to continue
                 slaveReciever();
-                if(signalFromSlave == 'D'){
-                    //turn 180 dont accept green signals again
-                    NAV_Move(70,0,'B'); //turn 180???
+                delay(1000);
+                NAV_Move(70,70,'B'); //turn 180???
+                delay(1000);
+                if(last_move=='R'){
+                    NAV_Move(70,0,'L'); //turn 90 left
                     delay(1000);
-                    NAV_Move(70,70,'F'); //move forward to get away from green circle
-                    delay(100); 
-                    jokerMissionFlag = true;
                 }
+                else if(last_move=='L'){
+                    NAV_Move(0,70,'R'); //turn 90 right
+                    delay(1000);
+                }
+                else{
+                    //do nothing
+                }
+                //NAV_Move(70,70,'F'); //move forward to get away from green circle
+                delay(100); 
+                jokerMissionFlag = true;
+                // if(signalFromSlave == 'D'){
+                //     //turn 180 dont accept green signals again
+                //     NAV_Move(70,0,'B'); //turn 180???
+                //     delay(1000);
+                //     NAV_Move(70,70,'F'); //move forward to get away from green circle
+                //     delay(100); 
+                //     jokerMissionFlag = true;
+                // }
                 delay(100);
             }
             
@@ -543,16 +562,16 @@ char last_move='W'; // R or L  don't let them know your next move
     
     
     if(policeFlag == true){
-        speedFactor = 1.7;
+        speedFactor = 1.2; //regular speed
         //mission ended
         //2nd time yellow is detected -> end mission
     }
-    unsigned long counter = 3000L + tick;
+    unsigned long counter = 1000L + tick;
     if (!policeFlag){
         while(tick < counter){
             //move forward
             //Increase speed of motors
-            speedFactor = 2.2;
+            speedFactor = 1.6;
             //IR_Sensor_Priority(2.2);
             int signal = IR_Sensor_Priority();
             startMoving(signal);
@@ -609,14 +628,14 @@ char last_move='W'; // R or L  don't let them know your next move
             //big turn right
             Serial.println("Big Turn Right");   //big turn right
             NAV_Move(40*speedFactor, 70*speedFactor, 'F');
-            delay(430);
+            delay(630);
             last_move='R';
             break;
         case 3:
             //big turn left
             Serial.println("Big Turn Left");   //big turn left
             NAV_Move(70*speedFactor ,40*speedFactor, 'F');
-            delay(430);
+            delay(630);
             last_move='L';
             break;
 
