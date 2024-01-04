@@ -1,2 +1,38 @@
-# Bat_mobile-Robot
+<h1 align="center" id="title">Bat_mobile-Robot</h1>
+  
+## MCT131s Introduction to Mechatronics Project Fall2023
 
+### Abstract
+design and manufacture a bat-mobile robot that follows the black line using IR sensors and implements some missions identified by a color sensor  using a specially designed shooting mechanism.  
+
+### Mind Map
+
+![image](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/25586027-01bb-42c4-b916-dabec1ae8848)
+
+
+### Modules
+● **Navigation:** All the functions for line following and color sensor 
+
+● **Shooting:** Functions for selecting the ball and shooting it
+
+● **Bluetooth:** Communication between the robot and the bat cave
+
+
+
+
+### System
+
+![schematicV1 0_page-0001 (1)](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/fbeecf82-4097-4d06-b255-15d18dc45aba)
+[schematicV1.0.PDF](https://github.com/Omar61554/Bat_mobile-Robot/files/13831259/schematicV1.0.PDF)
+
+the system consists of 2 arduinos, master and slave communicating with UART protocol sending signals from the color sensor of the mission color and received by the slave to start the shooting and then reply at the end of the mission.
+
+#### PCB
+
+
+
+## CAD
+
+## Robot
+## Report
+Drive Link : 
