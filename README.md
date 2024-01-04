@@ -1,10 +1,10 @@
 <h1 align="center" id="title">Bat_mobile-Robot</h1>
 
 
-<p align="center">
-    <img src="">![tanguycabon_batmobile_gif.gif](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/d6f22f4a-0d84-4b55-9768-ee4851eafbc6)
-</a>
-</p>
+![tanguycabon_batmobile_gif.gif](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/d6f22f4a-0d84-4b55-9768-ee4851eafbc6)
+
+
+
 
 
 ## MCT131s Introduction to Mechatronics Project Fall2023
