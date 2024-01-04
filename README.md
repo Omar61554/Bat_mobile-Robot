@@ -48,5 +48,7 @@ the system consists of 2 arduinos, master and slave communicating with UART prot
 
 ## Robot
 
+## Video
+Drive Link : https://drive.google.com/file/d/1enW-B_CkR1MSIdujXu7DNX1wD6lZzzd0/view?usp=share_link 
 ## Report
 Drive Link : 
