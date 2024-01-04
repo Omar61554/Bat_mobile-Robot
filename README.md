@@ -22,6 +22,8 @@ design and manufacture a bat-mobile robot that follows the black line using IR s
 
 ### System
 
+![System](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/466e876e-9e68-4b9e-9c48-4a98797fab24)
+
 ![schematicV1 0_page-0001 (1)](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/fbeecf82-4097-4d06-b255-15d18dc45aba)
 [schematicV1.0.PDF](https://github.com/Omar61554/Bat_mobile-Robot/files/13831259/schematicV1.0.PDF)
 
@@ -29,10 +31,15 @@ the system consists of 2 arduinos, master and slave communicating with UART prot
 
 #### PCB
 
+![PCB](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/ef86ced2-1949-4179-a3b5-4445c23ac6fb)
 
 
 ## CAD
+![CADm](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/43035af9-69d5-4ea2-8e87-4b0d64b671b6)
+![CAD](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/eaa91cad-d653-4726-8fce-6154ee88e2f3)
+
 
 ## Robot
+
 ## Report
 Drive Link : 
