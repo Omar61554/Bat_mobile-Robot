@@ -8,7 +8,7 @@ design and manufacture a bat-mobile robot that follows the black line using IR s
 ### Mind Map
 
 ![image](https://github.com/Omar61554/Bat_mobile-Robot/assets/114437079/25586027-01bb-42c4-b916-dabec1ae8848)
-
+<h4 align="center" id="title">light Mode</h4>     
 
 ### Modules
 ● **Navigation:** All the functions for line following and color sensor 
