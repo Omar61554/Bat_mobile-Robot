@@ -2,38 +2,42 @@
 /************** AUTHOR: Team 9          ********************************************************************************/
 /************** DATE: 11/26/2023        ********************************************************************************/
 /************** VERSION: 0.1            ********************************************************************************/
-/************** FILE: SHOT_interface.h  ********************************************************************************/
+/************** FILE: BLUE_interface.h  ********************************************************************************/
 /***********************************************************************************************************************/
 
-#ifndef SHOT_INTERFACE_H_
-#define SHOT_INTERFACE_H_
 
-//define motor pins
-#define SHOT_Motor_R_Enable 9 //Enable signal Right motor //white
-#define SHOT_Motor_R_Right 7 //direction 1 Right motor   //black
-#define SHOT_Motor_R_Left 8 //direction 2 Right motor    //yellow
+#ifndef BLUE_INTERFACE_H_
+#define BLUE_INTERFACE_H_
+#define calibDistance 100 
+//bluetooth pins
+#define BLUE_RX 2
+#define BLUE_TX 3
 
-//define servo motor pins
-#define SHOT_servo 12
+//ultrasonic pins 
+#define BLUE_Trig 10
+#define BLUE_Echo 11
+//servo motor pins
+#define BLUE_servo 12
 
 
 //functions
 
-
 /**
- * @brief shot the ball
+ * @brief check if the barrier is close or not
  * 
+ * @return char 
  */
-void SHOT_shoot();
-
+char BLUE_checkBarrier();
 
 /**
- * @brief select the ball
- * @param checkColor from color sensor
+ * @brief open the barrier
+ * 
+ * @param checkBarrier 
  */
-void SHOT_selectBall(char checkColor);
+void BLUE_Barrier(char checkBarrier);
 
 
 
 
-#endif /* SHOT_INTERFACE_H_ */
+
+#endif /* BLUE_INTERFACE_H_ */

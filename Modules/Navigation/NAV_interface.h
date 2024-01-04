@@ -1,5 +1,5 @@
 /***********************************************************************************************************************/
-/************** AUTHOR: OMAR KHALED     ********************************************************************************/
+/************** AUTHOR: Team 9         ********************************************************************************/
 /************** DATE: 11/26/2023        ********************************************************************************/
 /************** VERSION: 0.1            ********************************************************************************/
 /************** FILE: NAV_interface.h   ********************************************************************************/
@@ -42,6 +42,8 @@
 #define NAV_IRSignal_High 0 //high signal from IR Sensor
 #define NAV_IRSignal_Low 1 //low signal from IR Sensor
 
+
+
 class Car{
 private:
     int missionFlag; // 0 = no mission, 1 = joker, 2 = riddler, 3 = police chase
@@ -70,6 +72,7 @@ public:
     int calibValuesRiddler[3] = {197, 276, 217}; //(G > 300 && R < 300 && B < 260){ R= 197 G =276 B =217
 
     int calibValuesWhite[3]; // {red, green, blue}
+
     Car(){
         int missionFlag = 0;
         int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
@@ -92,163 +95,125 @@ public:
 
     }
     
-    
+    //Functions
+    /**
+     * @brief Get the Speed object
+     * 
+     */
     void getSpeed();
+
+    /**
+     * @brief Get the Direction object
+     * @param speed of motors
+     * @param direction of motors
+     */
+     */
     void NAV_Move(int rightMotorSpeed, int leftMotorSpeed, char NAV_direction);
+
+    /**
+     * @brief setup of pins
+     * 
+     */
     void setup();
+
+    /**
+     * @brief Get the IR Sensor object
+     * 
+     */
     void colorSensorCalibration();
     
+    /**
+     * @brief recieve signal from slave arduino
+     * 
+     */
     void slaveReciever();
 
+
+    /**
+     * @brief control the car
+     * 
+     */
     void controller();
+
+    /**
+     * @brief Get the IR Sensor object
+     * 
+     */
     int IR_Sensor_Priority();
+
+    /**
+     * @brief Get the IR Sensor object
+     * 
+     */
     void NAV_IR_TEST();
 
+    /**
+     * @brief volor sensor calibration
+     * 
+     */
+
     int NAV_Color_Sensor();
+
+    /**
+     * @brief select mission from color sensor
+     * 
+     */
     void missionSelector();
 
+
+    /**
+     * @brief joker mission implementation
+     * 
+     */
     void jokerMission();
+
+    /**
+     * @brief riddler mission implementation
+     * 
+     */
 
     void riddlerMission();
 
+    /**
+     * @brief police chase mission implementation
+     * 
+     */
+
     void policeChaseMission();
+
+    /**
+     * @brief move the car after mission
+     * @param signal from slave arduino
+     */
     void startMoving(int signal);
 
+    /**
+     * @brief Get the Red object
+     * 
+     * @return int 
+     */
     int NAV_getRed();
+
+    /**
+     * @brief Get the Blue object
+     * 
+     * @return int 
+     */
     int NAV_getBlue();
+
+    /**
+     * @brief Get the Green object
+     * 
+     * @return int 
+     */
     int NAV_getGreen();
+
+    /**
+     * @brief Get the Mission Flag object
+     * 
+     */
 
     void caveEntering();
 };
-
-
-
-/**
- * @brief  this function is used to setup the navigation module
- *
- */
-
-
-/**
- * @brief this function is the main function of the navigation module
- *
- */
-
-
-//void NAV_COLORSENSOR_TEST();
-
-
-
-
-
-
-
-
-
-
-
-
-//color sensor values
-// int calibValueRed ;
-// int calibValueGreen ;
-// int calibValueBlue ;
-
-
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/**
- * @brief this function is used to move the robot
-*/
-void NAV_Move(int NAV_Motor_R_Speed, int NAV_Motor_L_Speed, char NAV_direction);
-
-
-
-/**
- * @brief this function is used to get the red value from the color sensor
-*/
-int NAV_getRed();
-
-
-
-/**
- * @brief this function is used to get the green value from the color sensor
- * 
-*/
-int NAV_getGreen();
-
-
-
-/**
- *@brief this function is used to get the blue value from the color sensor
-*/
-int NAV_getBlue();
-
-
-
-/**
- * @brief  this function is used to setup the navigation module
- * 
- */
-void NAV_Setup();
-
-
-
-/**
- * @brief  this function is a test function for the motors
- * 
- */
-//void NAV_Main();
-
-/**
- * @brief  this function is the main function of the line follower
- * 
- */
-//void IR_Sensor_Priority(float F);
-
-/**
- * @brief  this function is used to test IR sensors
- * 
- */
-//void NAV_IR_TEST();
-
-/**
- * @brief  this function is used to detect the color
- * 
- */
-//int NAV_Color_Sensor();
-
-/**
- * @brief  this function is used to select mission 
- * 
- */
-//void missionSelector(int colorValue);
-
-/**
- * @brief  this function is used to call joker mission
- * 
- */
-void jokerMission();
-
-/**
- * @brief  this function is used to call riddler mission
- * 
- */
-void riddlerMission();
-
-/**
- * @brief  this function is used to call the police chase mission
- * 
- */
-void policeChaseMission();
-
 
 #endif /* NAV_INTERFACE_H_ */
