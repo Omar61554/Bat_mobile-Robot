@@ -33,49 +33,65 @@
  #define NAV_Color_s2 A2
  #define NAV_Color_s3 A1
  #define NAV_colorSensor_out  A3
-// #define NAV_Modes_s0 9
-// #define NAV_Modes_s1 8
-// #define NAV_Color_s2 6
-// #define NAV_Color_s3 5
-// #define NAV_colorSensor_out A5
 
-//IR Sensor values
-// int IR1;
-// int IR2;
-// int IR3;
-// // int IR4;
-// int IR5;
+//Speed factors
+#define normalSpeed 1.7
+#define maximumSpeed 1.9
 
 //IR Sensor values
 #define NAV_IRSignal_High 0 //high signal from IR Sensor
 #define NAV_IRSignal_Low 1 //low signal from IR Sensor
 
-//int NAV_IR_Signal_R;
-//int NAV_IR_Signal_L;
 class Car{
 private:
     int missionFlag; // 0 = no mission, 1 = joker, 2 = riddler, 3 = police chase
     int IR1,IR2,IR3,IR4,IR5; // sensors from right to left: IR1 IR2 IR3 IR4 IR5
     
-    //if abs(reading-calib value) < 20 -> select mission
     int NAV_Motor_R_Speed;
     int NAV_Motor_L_Speed;
     char NAV_direction; 
 
-    float speedFactor = 1.1; // multiply speed of motors by this value
+    float speedFactor = normalSpeed; // multiply speed of motors by this value
 
     bool policeFlag; // true if detected first yellow color , false by default
     bool jokerMissionFlag;
     bool riddlerMissionFlag;
+    char caveSignal;
+    bool caveOpened;
+
+    char last_move;
+     
 
 public:
     //Constructor
     int signalFromSlave;
     int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
     int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
-    int calibValuesRiddler[3] = {279, 312, 239}; //(G > 300 && R < 300 && B < 260){
+    int calibValuesRiddler[3] = {197, 276, 217}; //(G > 300 && R < 300 && B < 260){ R= 197 G =276 B =217
+
     int calibValuesWhite[3]; // {red, green, blue}
-    Car();
+    Car(){
+        int missionFlag = 0;
+        int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
+        int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
+        int calibValuesRiddler[3] = {279, 312, 239}; //(G > 300 && R < 300 && B < 260){
+        int NAV_Motor_L_Speed = 0;
+        int NAV_Motor_R_Speed = 0;
+        char NAV_direction = 'F';
+        float speedFactor = normalSpeed;
+        
+        bool policeFlag = false;
+        bool jokerMissionFlag = false;
+        bool riddlerMissionFlag = false;
+
+        bool caveOpened = false;
+        char signalFromSlave = 'k';
+        char caveSignal = 'p';
+
+        char last_move='w';
+
+    }
+    
     
     void getSpeed();
     void NAV_Move(int rightMotorSpeed, int leftMotorSpeed, char NAV_direction);
@@ -97,11 +113,15 @@ public:
 
     void policeChaseMission();
     void startMoving(int signal);
+
+    int NAV_getRed();
+    int NAV_getBlue();
+    int NAV_getGreen();
+
+    void caveEntering();
 };
 
-int NAV_getRed();
-int NAV_getBlue();
-int NAV_getGreen();
+
 
 /**
  * @brief  this function is used to setup the navigation module
