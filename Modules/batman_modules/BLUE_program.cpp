@@ -2,6 +2,12 @@
 #include "SoftwareSerial.h"
 #include <Servo.h>
 
+/*
+Slave: 
+Sensors: Ultrasonic (Gives distance) -> Check Barrier (outputs distance// 'O')
+Motors: Servo(Sorting) , DC Motor(Shooting)
+UART connections: Takes characters (J,R) ->starts shooting based on character
+*/
 
 
 char BLUE_checkBarrier()
@@ -28,26 +34,26 @@ char BLUE_checkBarrier()
     delay(1000);
 
 
-if(distance<calibDistance)
-{
-    //send signal to arduino to open the barrier
-    //create new serial for pins 2 and 3 from function software serial
-        SoftwareSerial mySerial(BLUE_RX, BLUE_TX); // RX, TX
-        mySerial.begin(9600);
-        // send via bluetooth module to arduino to open the barrier
+    if(distance<calibDistance)
+    {
+        //send signal to arduino to open the barrier
+        //create new serial for pins 2 and 3 from function software serial
+    
+            // send via bluetooth module to arduino to open the barrier
+            myserial.write('O');
+
+            Serial.begin(9600);
+            Serial.write('O'); //recieve this message in master arduino to stop the car for a moment
+        return 'O';
+    }
+    else
+    {
+        mySerial.write('g');
+        return 'g';
+    }
 
 
-        mySerial.write('O'); //recieve this message in master arduino to stop the car for a moment
-    return 'O';
-}
-else
-{
-    mySerial.write('g');
-    return 'g';
-}
-
-
-    return true;
+        return true;
 }
 
 void BLUE_Barrier(char checkBarrier)
@@ -57,7 +63,7 @@ void BLUE_Barrier(char checkBarrier)
     //servo motor
     Servo BLUE_servo;
     BLUE_servo.attach(BLUE_servo);
-    if(checkBarrier=='O')
+    if(checkBarrier == 'O')
     {
         BLUE_servo.write(90);
     }

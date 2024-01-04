@@ -6,8 +6,6 @@
 /***********************************************************************************************************************/
 
 #include "NAV_interface.h"
-#include "NAV_private.h"
-#include "NAV_configure.h"
 #include <math.h>
 #include <Arduino.h>
 
@@ -40,24 +38,24 @@ char last_move='W'; // R or L  don't let them know your next move
 
 
     //Constructor
-    Car::Car(){
-        int missionFlag = 0;
-        int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
-        int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
-        int calibValuesRiddler[3] = {279, 312, 239}; //(G > 300 && R < 300 && B < 260){
-        int NAV_Motor_L_Speed = 0;
-        int NAV_Motor_R_Speed = 0;
-        char NAV_direction = 'F';
-        float speedFactor = normalSpeed;
+    // Car::Car(){
+    //     int missionFlag = 0;
+    //     int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
+    //     int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
+    //     int calibValuesRiddler[3] = {279, 312, 239}; //(G > 300 && R < 300 && B < 260){
+    //     int NAV_Motor_L_Speed = 0;
+    //     int NAV_Motor_R_Speed = 0;
+    //     char NAV_direction = 'F';
+    //     float speedFactor = normalSpeed;
         
-        bool policeFlag = false;
-        bool jokerMissionFlag = false;
-        bool riddlerMissionFlag = false;
+    //     bool policeFlag = false;
+    //     bool jokerMissionFlag = false;
+    //     bool riddlerMissionFlag = false;
 
-        bool caveOpened = false;
-        char signalFromSlave = 'k';
-        char caveSignal = 'p';
-    }
+    //     bool caveOpened = false;
+    //     char signalFromSlave = 'k';
+    //     char caveSignal = 'p';
+    // }
     void Car::getSpeed(){
         Serial.print("Right speed: ");
         Serial.print(NAV_Motor_R_Speed);
@@ -147,6 +145,7 @@ char last_move='W'; // R or L  don't let them know your next move
 
         caveEntering();
 
+        Serial.write('e');
     }
     int Car::IR_Sensor_Priority(){  // outputs control actions (staight line, big turn right)
         // IR5 IR4 IR3 IR2 IR1 //
@@ -229,21 +228,21 @@ char last_move='W'; // R or L  don't let them know your next move
 
     int B = NAV_getBlue();  
     
-    if (abs(R-calibValuesJoker[0]) < 25 
-     && abs(G-calibValuesJoker[1]) < 25 
-     && abs(G-calibValuesJoker[2]) < 25){
+    if (abs(R-calibValuesJoker[0]) < 35 
+     && abs(G-calibValuesJoker[1]) < 35 
+     && abs(G-calibValuesJoker[2]) < 35){
         //red
         return 1;
     }
-    else if(abs(R-calibValuesRiddler[0]) < 25 
-         && abs(G-calibValuesRiddler[1]) < 25 
-         && abs(B-calibValuesRiddler[2]) < 25){;
+    else if(abs(R-calibValuesRiddler[0]) < 35 
+         && abs(G-calibValuesRiddler[1]) < 35 
+         && abs(B-calibValuesRiddler[2]) < 35){;
         //green
         return 2;
     }
-    else if(abs(R-calibValuesPoliceChase[0]) < 25 
-         && abs(G-calibValuesPoliceChase[1]) < 25 
-         && abs(B-calibValuesPoliceChase[2]) < 25){
+    else if(abs(R-calibValuesPoliceChase[0]) < 35 
+         && abs(G-calibValuesPoliceChase[1]) < 35 
+         && abs(B-calibValuesPoliceChase[2]) < 35){
         //yellow
         return 3;
     }
@@ -320,17 +319,17 @@ char last_move='W'; // R or L  don't let them know your next move
                     //time exceeded, move on
                 }
                 
-                if(last_move=='R' && (signalFromSlave == 'D')){
+                if(last_move=='L' && (signalFromSlave == 'D')){
                     NAV_Move(70,70,'B'); //turn 180???
-                    delay(1000);
-                    NAV_Move(70,0,'R'); //turn 90 left
-                    delay(1000);
+                    delay(1500);
+                    NAV_Move(70,0,'B'); //turn 90 left
+                    delay(1500);
                 }
-                else if(last_move=='L' && (signalFromSlave == 'D')){
-                    NAV_Move(70,70,'R'); //turn 180???
-                    delay(1000);
-                    NAV_Move(0,70,'R'); //turn 90 right
-                    delay(1000);
+                else if(last_move=='R' && (signalFromSlave == 'D')){
+                    NAV_Move(70,70,'B'); //turn 180???
+                    delay(1500);
+                    NAV_Move(0,70,'B'); //turn 90 right
+                    delay(1500);
                 }
                 else{
                     //do nothing
@@ -345,7 +344,7 @@ char last_move='W'; // R or L  don't let them know your next move
                 //     delay(100); 
                 //     jokerMissionFlag = true;
                 // }
-                delay(100);
+                
             }
             
         }
@@ -357,58 +356,58 @@ char last_move='W'; // R or L  don't let them know your next move
         }
 
     void Car::riddlerMission(){
-        
         //stop 
         //send flag to slave to initiate shooting mechanism
         //wait for signal from slave to continue
-        NAV_Move(0, 0, 'F');
-        delay(4000);
-        if (jokerMissionFlag == false){
+
+        unsigned long tick = millis();
+        unsigned long tock = millis();
+
+        
+        if (riddlerMissionFlag == false){
+  
             while(signalFromSlave != 'D'){
-                //stop
+                
                 NAV_Move(0, 0, 'F');
-                //getSpeed();
-                // Serial.println("inside signal slave loop");
-                //send flag to slave to initiate shooting mechanism
-                Serial.write('J'); //start shooting mechanism for joker mission
+                
+                //Send flag to slave to initiate shooting mechanism
+                Serial.write('R'); //start shooting mechanism for riddler mission
                 
                 // ~recieve signal from slave~
                 //wait for signal from slave to continue
                 slaveReciever();
-                delay(1000);
-                NAV_Move(70,70,'B'); //turn 180???
-                delay(1000);
-                if(last_move=='R'){
-                    NAV_Move(70,0,'L'); //turn 90 left
-                    delay(1000);
+                
+                tock = millis();
+                if((tock - tick > 12000) ){
+                    signalFromSlave = 'D';
+                    //time exceeded, move on
                 }
-                else if(last_move=='L'){
-                    NAV_Move(0,70,'R'); //turn 90 right
-                    delay(1000);
+                
+                if(last_move=='L' && (signalFromSlave == 'D')){
+                    NAV_Move(70,70,'B'); //turn 180???
+                    delay(1500);
+                    NAV_Move(70,0,'B'); //turn 90 left
+                    delay(1500);
+                }
+                else if(last_move=='R' && (signalFromSlave == 'D')){
+                    NAV_Move(70,70,'B'); //turn 180???
+                    delay(1500);
+                    NAV_Move(0,70,'B'); //turn 90 right
+                    delay(1500);
                 }
                 else{
                     //do nothing
                 }
-                //NAV_Move(70,70,'F'); //move forward to get away from green circle
                 delay(100); 
-                jokerMissionFlag = true;
-                // if(signalFromSlave == 'D'){
-                //     //turn 180 dont accept green signals again
-                //     NAV_Move(70,0,'B'); //turn 180???
-                //     delay(1000);
-                //     NAV_Move(70,70,'F'); //move forward to get away from green circle
-                //     delay(100); 
-                //     jokerMissionFlag = true;
-                // }
-                delay(100);
+                riddlerMissionFlag = true;
+                
             }
             
         }
         else{
             //do nothing
-            Serial.println("Joker Mission Ended");
+            Serial.println("Riddler Mission Ended");
         }
-        
         
         
     }
@@ -453,9 +452,9 @@ char last_move='W'; // R or L  don't let them know your next move
         switch(signal){
         case 0:
             
-            Serial.println("REVERSE"); //REVERSE
-            NAV_Move(60*speedFactor, 60*speedFactor, 'B');
-            delay(80);
+            // Serial.println("REVERSE"); //REVERSE
+            // NAV_Move(60*speedFactor, 60*speedFactor, 'B');
+            // delay(30);
             break;
         
         case 1:
@@ -468,34 +467,34 @@ char last_move='W'; // R or L  don't let them know your next move
         case 2:
             //big turn right
             Serial.println("Big Turn Right");   //big turn right
-            NAV_Move(40*speedFactor, 70*speedFactor, 'F');
-            delay(630);
+            NAV_Move(40*speedFactor, 90*speedFactor, 'F');
+            delay(300);
             last_move='R';
             break;
         case 3:
             //big turn left
             Serial.println("Big Turn Left");   //big turn left
-            NAV_Move(70*speedFactor ,40*speedFactor, 'F');
-            delay(630);
+            NAV_Move(90*speedFactor ,40*speedFactor, 'F');
+            delay(300);
             last_move='L';
             break;
 
         case 4:
             //small turn right
             Serial.println("Small Turn Right");  //small turn right
-            NAV_Move(50*speedFactor, 70*speedFactor, 'F');
-            delay(30);
+            NAV_Move(50*speedFactor, 80*speedFactor, 'F');
+            delay(120);
             break;
 
         case 5:
             //small turn left
             Serial.println("Small Turn Left");//small turn left
-            NAV_Move(70*speedFactor, 50*speedFactor, 'F');
-            delay(30);
+            NAV_Move(80*speedFactor, 50*speedFactor, 'F');
+            delay(120);
             break;
         
         default:
-            NAV_Move(20*speedFactor, 20*speedFactor, 'F');
+            NAV_Move(40*speedFactor, 40*speedFactor, 'F');
             delay(100);
             //do nothing
             break;

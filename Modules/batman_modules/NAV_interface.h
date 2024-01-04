@@ -35,8 +35,8 @@
  #define NAV_colorSensor_out  A3
 
 //Speed factors
-#define normalSpeed 1.2
-#define maximumSpeed 1.7
+#define normalSpeed 1.7
+#define maximumSpeed 1.9
 
 //IR Sensor values
 #define NAV_IRSignal_High 0 //high signal from IR Sensor
@@ -57,8 +57,20 @@ private:
     bool jokerMissionFlag;
     bool riddlerMissionFlag;
     char caveSignal;
+    bool caveOpened;
 
-     Car::Car(){
+    char last_move;
+     
+
+public:
+    //Constructor
+    int signalFromSlave;
+    int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
+    int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
+    int calibValuesRiddler[3] = {197, 276, 217}; //(G > 300 && R < 300 && B < 260){ R= 197 G =276 B =217
+
+    int calibValuesWhite[3]; // {red, green, blue}
+    Car(){
         int missionFlag = 0;
         int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
         int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
@@ -76,16 +88,10 @@ private:
         char signalFromSlave = 'k';
         char caveSignal = 'p';
 
-    }
+        char last_move='w';
 
-public:
-    //Constructor
-    int signalFromSlave;
-    int calibValuesPoliceChase[3] ={352,326,269}; // {271,255,205}; //R > 340 && G > 320 && B < 290
-    int calibValuesJoker[3] = {335,202,210}; //(R > 310 && G < 270 && B < 270)
-    int calibValuesRiddler[3] = {279, 312, 239}; //(G > 300 && R < 300 && B < 260){
-    int calibValuesWhite[3]; // {red, green, blue}
-    Car();
+    }
+    
     
     void getSpeed();
     void NAV_Move(int rightMotorSpeed, int leftMotorSpeed, char NAV_direction);
@@ -111,6 +117,8 @@ public:
     int NAV_getRed();
     int NAV_getBlue();
     int NAV_getGreen();
+
+    void caveEntering();
 };
 
 

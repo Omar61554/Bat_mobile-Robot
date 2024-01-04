@@ -4,6 +4,8 @@
 
 void setup() {
   Serial.begin(9600); // Initialize serial communication at 9600 baud
+  SoftwareSerial mySerial(BLUE_RX, BLUE_TX); // RX, TX
+  mySerial.begin(9600);
 }
 
 void loop() {
